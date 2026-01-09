@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Academic Wizard</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="stars-bg"></div>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <span class="logo-icon">✨</span>
+                <a href="index.html" class="logo">Academic<span class="logo-accent">Wizard</span></a>
+            </div>
+            <button class="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="navbar">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="resources.html" class="nav-link">Resources</a>
+                <a href="testimonials.html" class="nav-link">Testimonials</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+                <a href="book.html" class="btn btn-primary btn-sm">Book Now</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="login-section">
+            <div class="login-container">
+                <div class="login-header">
+                    <h1>Welcome Back</h1>
+                    <p>Sign in to access your account</p>
+                </div>
+
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required placeholder="Enter your password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role">Login As</label>
+                        <select id="role" name="role" required>
+                            <option value="">Select Role</option>
+                            <option value="student">Student</option>
+                            <option value="tutor">Tutor</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" name="remember">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg btn-full">Sign In</button>
+
+                    <div class="form-divider">
+                        <span>or</span>
+                    </div>
+
+                    <div class="alt-login">
+                        <button type="button" class="btn btn-secondary btn-lg btn-full">
+                            <span>📧</span> Continue with Google
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-lg btn-full">
+                            <span>🔷</span> Continue with Microsoft
+                        </button>
+                    </div>
+
+                    <p class="signup-prompt">
+                        Don't have an account? <a href="signup.html">Sign up here</a>
+                    </p>
+                </form>
+
+                <div class="login-info">
+                    <div class="info-card">
+                        <h3>👨‍🎓 Students</h3>
+                        <p>Access your learning dashboard, track progress, and manage bookings</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>👨‍🏫 Tutors</h3>
+                        <p>Manage your schedule, view student sessions, and update availability</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>⚙️ Admins</h3>
+                        <p>Full system access, user management, and analytics dashboard</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Academic Wizard</h4>
+                    <p>Your pathway to academic excellence</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="testimonials.html">Testimonials</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>📧 hello@academicwizard.com</p>
+                    <p>📞 +1 (234) 567-8900</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Academic Wizard. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="javascript/login.js"></script>
+    <script src="javascript/navbar.js"></script>
+</body>
+</html>

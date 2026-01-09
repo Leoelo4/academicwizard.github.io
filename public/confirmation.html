@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Confirmed - Academic Wizard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="animated-bg"></div>
+  
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="logo-container">
+        <span class="logo-icon">🎓</span>
+        <a href="index.html" class="logo">Academic<span class="logo-accent">Wizard</span></a>
+      </div>
+      
+      <button class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <nav class="navbar">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="tutors.html" class="nav-link">Tutors</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="book.html" class="btn btn-primary btn-sm">Book Now</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Confirmation Section -->
+  <section class="confirmation-section">
+    <div class="container">
+      <div class="confirmation-card">
+        <div class="confirmation-icon">✓</div>
+        <h1 class="confirmation-title">Booking Confirmed!</h1>
+        <p class="confirmation-subtitle">We've received your booking request. You'll receive a confirmation email shortly.</p>
+        
+        <div class="booking-details">
+          <h2>Booking Details</h2>
+          
+          <div class="detail-row">
+            <span class="detail-label">Student Name</span>
+            <span class="detail-value" id="detail-name">-</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Email</span>
+            <span class="detail-value" id="detail-email">-</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Phone</span>
+            <span class="detail-value" id="detail-phone">-</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Tutor</span>
+            <span class="detail-value" id="detail-tutor">-</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Session Date</span>
+            <span class="detail-value" id="detail-date">-</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Session Time</span>
+            <span class="detail-value" id="detail-time">-</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Duration</span>
+            <span class="detail-value" id="detail-duration">-</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Session Type</span>
+            <span class="detail-value" id="detail-type">-</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Subject</span>
+            <span class="detail-value" id="detail-subject">-</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Level</span>
+            <span class="detail-value" id="detail-level">-</span>
+          </div>
+          
+          <div class="detail-row full-width" id="notes-row" style="display: none;">
+            <span class="detail-label">Additional Notes</span>
+            <span class="detail-value" id="detail-notes">-</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Booking Reference</span>
+            <span class="detail-value reference" id="detail-reference">-</span>
+          </div>
+        </div>
+        
+        <div class="confirmation-actions">
+          <a href="index.html" class="btn btn-primary">Back to Home</a>
+          <a href="book.html" class="btn btn-outline">Book Another Session</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="javascript/navbar.js"></script>
+  <script src="javascript/confirmation.js"></script>
+</body>
+</html>

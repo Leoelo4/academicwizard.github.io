@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book a Session - Academic Wizard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="animated-bg"></div>
+  <div class="stars-bg"></div>
+  
+  <header class="header">
+    <div class="container">
+      <div class="logo-container">
+        <span class="logo-icon">✨</span>
+        <a href="index.html" class="logo">Academic<span class="logo-accent">Wizard</span></a>
+      </div>
+      <button class="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="navbar">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="resources.html" class="nav-link">Resources</a>
+        <a href="testimonials.html" class="nav-link">Testimonials</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
+        <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+        <a href="book.html" class="btn btn-primary btn-sm">Book Now</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <h1>Book Your Tutoring Session</h1>
+      <p>Select your tutor, choose a time, and start your journey to success</p>
+    </section>
+
+    <section class="content-section">
+      <div class="container">
+        <h2>Available Tutors</h2>
+        <div class="tutors-grid">
+          <div class="tutor-card">
+            <div class="tutor-badge">⭐ Highly Rated</div>
+            <h3>John Smith</h3>
+            <p class="tutor-subject">Mathematics & Physics</p>
+            <p class="tutor-rating">4.9/5 (87 reviews)</p>
+            <p>Experienced educator with 8+ years of tutoring expertise. Specializes in exam preparation.</p>
+            <p class="tutor-price">$35/hour</p>
+            <button class="btn btn-primary" onclick="selectTutor('john')">View & Book</button>
+          </div>
+
+          <div class="tutor-card">
+            <div class="tutor-badge">⭐ Popular</div>
+            <h3>Sarah Johnson</h3>
+            <p class="tutor-subject">English & Languages</p>
+            <p class="tutor-rating">4.8/5 (92 reviews)</p>
+            <p>Passionate about literature and language learning with innovative teaching methods.</p>
+            <p class="tutor-price">$30/hour</p>
+            <button class="btn btn-primary" onclick="selectTutor('sarah')">View & Book</button>
+          </div>
+
+          <div class="tutor-card">
+            <div class="tutor-badge">⭐ Expert</div>
+            <h3>Michael Chen</h3>
+            <p class="tutor-subject">Science & Chemistry</p>
+            <p class="tutor-rating">4.9/5 (65 reviews)</p>
+            <p>Specialist in making complex concepts easy to understand through hands-on learning.</p>
+            <p class="tutor-price">$35/hour</p>
+            <button class="btn btn-primary" onclick="selectTutor('michael')">View & Book</button>
+          </div>
+
+          <div class="tutor-card">
+            <div class="tutor-badge">⭐ Certified</div>
+            <h3>Emily Rodriguez</h3>
+            <p class="tutor-subject">Test Prep & Exam Revision</p>
+            <p class="tutor-rating">4.7/5 (120 reviews)</p>
+            <p>Dedicated to helping students achieve their best results with proven strategies.</p>
+            <p class="tutor-price">$40/hour</p>
+            <button class="btn btn-primary" onclick="selectTutor('emily')">View & Book</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="container">
+        <h2>Quick Booking</h2>
+        <form class="booking-form" id="bookingForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="student-name">Student Name *</label>
+              <input type="text" id="student-name" name="student-name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone">
+            </div>
+
+            <div class="form-group">
+              <label for="tutor">Select Tutor *</label>
+              <select id="tutor" name="tutor" required>
+                <option value="">-- Choose a tutor --</option>
+                <option value="john">John Smith - Mathematics & Physics ($35/hr)</option>
+                <option value="sarah">Sarah Johnson - English & Languages ($30/hr)</option>
+                <option value="michael">Michael Chen - Science & Chemistry ($35/hr)</option>
+                <option value="emily">Emily Rodriguez - Test Prep & Exam Revision ($40/hr)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="session-date">Preferred Date *</label>
+              <input type="date" id="session-date" name="session-date" required>
+            </div>
+
+            <div class="form-group">
+              <label for="session-time">Preferred Time *</label>
+              <select id="session-time" name="session-time" required>
+                <option value="">-- Select time --</option>
+                <option value="08:00">08:00 AM</option>
+                <option value="08:30">08:30 AM</option>
+                <option value="09:00">09:00 AM</option>
+                <option value="09:30">09:30 AM</option>
+                <option value="10:00">10:00 AM</option>
+                <option value="10:30">10:30 AM</option>
+                <option value="11:00">11:00 AM</option>
+                <option value="11:30">11:30 AM</option>
+                <option value="12:00">12:00 PM</option>
+                <option value="12:30">12:30 PM</option>
+                <option value="13:00">01:00 PM</option>
+                <option value="13:30">01:30 PM</option>
+                <option value="14:00">02:00 PM</option>
+                <option value="14:30">02:30 PM</option>
+                <option value="15:00">03:00 PM</option>
+                <option value="15:30">03:30 PM</option>
+                <option value="16:00">04:00 PM</option>
+                <option value="16:30">04:30 PM</option>
+                <option value="17:00">05:00 PM</option>
+                <option value="17:30">05:30 PM</option>
+                <option value="18:00">06:00 PM</option>
+                <option value="18:30">06:30 PM</option>
+                <option value="19:00">07:00 PM</option>
+                <option value="19:30">07:30 PM</option>
+                <option value="20:00">08:00 PM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="duration">Session Duration *</label>
+              <select id="duration" name="duration" required>
+                <option value="">-- Select duration --</option>
+                <option value="30">30 minutes</option>
+                <option value="60">1 hour</option>
+                <option value="90">1.5 hours</option>
+                <option value="120">2 hours</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="session-type">Session Type *</label>
+              <select id="session-type" name="session-type" required>
+                <option value="">-- Select type --</option>
+                <option value="online">Online</option>
+                <option value="in-person">In-Person</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Subject Area *</label>
+            <input type="text" id="subject" name="subject" placeholder="e.g., Algebra, Essay Writing" required>
+          </div>
+
+          <div class="form-group">
+            <label for="level">Student Level *</label>
+            <select id="level" name="level" required>
+              <option value="">-- Select level --</option>
+              <option value="elementary">Elementary (K-5)</option>
+              <option value="middle">Middle School (6-8)</option>
+              <option value="high">High School (9-12)</option>
+              <option value="college">College</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Additional Notes</label>
+            <textarea id="notes" name="notes" rows="4" placeholder="Tell us more about what you need help with, your goals, or any specific challenges..."></textarea>
+          </div>
+
+          <div class="form-submit">
+            <button type="submit" class="btn btn-primary">Book Session</button>
+            <p class="form-note">* Required fields. You'll receive a confirmation email shortly.</p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="content-section booking-faq">
+      <div class="container">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-grid">
+          <div class="faq-item">
+            <h4>How do I book a session?</h4>
+            <p>Simply fill out the booking form above with your details, select your preferred tutor, date, and time. You'll receive a confirmation email with all the details.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Can I reschedule?</h4>
+            <p>Yes! You can reschedule up to 24 hours before your session. Contact us for any changes.</p>
+          </div>
+          <div class="faq-item">
+            <h4>What's your cancellation policy?</h4>
+            <p>Cancellations made 24+ hours in advance receive a full refund. Late cancellations may incur a 50% fee.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Do you offer group sessions?</h4>
+            <p>Yes! We offer both individual and group tutoring. Contact us for group rates and availability.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="container">
+        <h2>Payment & Pricing</h2>
+        <div class="value-grid">
+          <div class="value-card">
+            <div class="value-icon">💳</div>
+            <h3>Secure Payment</h3>
+            <p>We accept all major credit cards via Stripe. Your payment information is encrypted and secure.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">💰</div>
+            <h3>Flexible Pricing</h3>
+            <p>Pay per session or purchase packages for discounts. Prices range from $30-$50 per hour.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🔄</div>
+            <h3>Cancellation Policy</h3>
+            <p>Cancel up to 24 hours in advance for a full refund. Late cancellations may incur a 50% fee.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon">🎁</div>
+            <h3>Money-Back Guarantee</h3>
+            <p>Not satisfied? Get your money back within 7 days, no questions asked.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="cta-content">
+        <h2>Ready to Book?</h2>
+        <p>Choose your tutor and schedule your session above. Payment will be processed securely.</p>
+        <div class="cta-buttons">
+          <a href="contact.html" class="btn btn-secondary btn-lg">Have Questions?</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Academic Wizard</h4>
+          <p>Your pathway to academic excellence</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="resources.html">Resources</a></li>
+            <li><a href="testimonials.html">Testimonials</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Contact</h4>
+          <p>📧 hello@academicwizard.com</p>
+          <p>📞 +1 (234) 567-8900</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Academic Wizard. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="javascript/typewriter.js"></script>
+  <script src="javascript/booking.js"></script>
+  <script src="javascript/navbar.js"></script>
+</body>
+</html>
