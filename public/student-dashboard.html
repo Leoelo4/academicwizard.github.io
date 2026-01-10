@@ -55,11 +55,16 @@
                 </div>
 
                 <!-- My Lessons -->
-                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg);">
+                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); position: relative; margin-top: 3rem;">
+                    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);"></div>
                     <h2 style="margin-bottom: 1.5rem;">My Lessons</h2>
+                    <div class="search-bar" style="margin-bottom: 1.5rem;">
+                        <input type="text" id="lessons-search" placeholder="🔍 Search lessons by tutor, subject, or date..." style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-primary); border: 1px solid rgba(184, 197, 214, 0.2); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem;">
+                    </div>
                     <div id="lessons-list" style="overflow-x: auto;">
                         <p style="color: var(--text-muted);">Loading your lessons...</p>
                     </div>
+                    <div id="lessons-pagination" class="pagination" style="display: none; margin-top: 1.5rem; text-align: center;"></div>
                 </div>
             </div>
         </section>

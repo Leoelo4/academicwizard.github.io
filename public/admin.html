@@ -89,15 +89,21 @@
                 </div>
 
                 <!-- Manage Tutors -->
-                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem;">
+                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem; position: relative; margin-top: 3rem;">
+                    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);"></div>
                     <h2 style="margin-bottom: 1.5rem;">Manage Tutors</h2>
+                    <div class="search-bar" style="margin-bottom: 1.5rem;">
+                        <input type="text" id="tutors-search" placeholder="🔍 Search tutors by name, email, or subject..." style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-primary); border: 1px solid rgba(184, 197, 214, 0.2); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem;">
+                    </div>
                     <div id="tutors-list" style="overflow-x: auto;">
                         <p style="color: var(--text-muted);">Loading...</p>
                     </div>
+                    <div id="tutors-pagination" class="pagination" style="display: none; margin-top: 1.5rem; text-align: center;"></div>
                 </div>
 
                 <!-- Manage Resources -->
-                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem;">
+                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem; position: relative; margin-top: 3rem;">
+                    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);"></div>
                     <h2 style="margin-bottom: 1.5rem; text-align: center;">Manage Resources</h2>
                     <div id="resource-messages"></div>
                     <form id="uploadResourceForm" style="max-width: 600px; margin: 0 auto 2rem;">
@@ -130,18 +136,30 @@
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%;">Add Resource</button>
                     </form>
-                    <h3 style="margin-bottom: 1rem;">Current Resources</h3>
+                    <div style="width: 100%; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent); margin: 2.5rem 0 2rem 0;"></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 2rem;">
+                        <h3 style="margin: 0;">Current Resources</h3>
+                        <div class="search-bar" style="flex: 1; max-width: 400px;">
+                            <input type="text" id="resources-search" placeholder="🔍 Search resources..." style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-primary); border: 1px solid rgba(184, 197, 214, 0.2); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem;">
+                        </div>
+                    </div>
                     <div id="resources-list" style="overflow-x: auto;">
                         <p style="color: var(--text-muted);">Loading...</p>
                     </div>
+                    <div id="resources-pagination" class="pagination" style="display: none; margin-top: 1.5rem; text-align: center;"></div>
                 </div>
 
                 <!-- Manage Bookings -->
-                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg);">
+                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); position: relative; margin-top: 3rem;">
+                    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);"></div>
                     <h2 style="margin-bottom: 1.5rem;">Manage Bookings</h2>
+                    <div class="search-bar" style="margin-bottom: 1.5rem;">
+                        <input type="text" id="bookings-search" placeholder="🔍 Search bookings by student, tutor, or subject..." style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-primary); border: 1px solid rgba(184, 197, 214, 0.2); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem;">
+                    </div>
                     <div id="bookings-list" style="overflow-x: auto;">
                         <p style="color: var(--text-muted);">Loading...</p>
                     </div>
+                    <div id="bookings-pagination" class="pagination" style="display: none; margin-top: 1.5rem; text-align: center;"></div>
                 </div>
             </div>
         </section>
