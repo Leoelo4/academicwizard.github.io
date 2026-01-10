@@ -23,85 +23,70 @@
       </button>
       <nav class="navbar">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="services.html" class="nav-link">Services</a>
+        <a href="about.html" class="nav-link">About</a>
         <a href="resources.html" class="nav-link active">Resources</a>
-        <a href="testimonials.html" class="nav-link">Testimonials</a>
-        <a href="index.html#contact" class="nav-link">Contact</a>
-        <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
-        <a href="book.html" class="btn btn-primary btn-sm">Book Now</a>
+        <a href="book.html" class="nav-link">Book Session</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="login.html" class="btn btn-secondary btn-sm login-btn">Login</a>
       </nav>
     </div>
   </header>
 
   <main>
     <section class="page-hero">
-      <h1>Learning Resources</h1>
-      <p>Free and premium study materials for academic success</p>
+      <h1>Free Learning Resources</h1>
+      <p>Comprehensive study materials for all educational levels - completely free</p>
     </section>
 
-    <section class="content-section">
+    <!-- KS3 Resources -->
+    <section class="content-section" id="ks3-section" style="display: none;">
       <div class="container">
-        <h2>Free Study Materials</h2>
-        <div class="resources-grid">
-          <div class="resource-card">
-            <h3>📐 Maths Fundamentals</h3>
-            <p>Complete overview of maths fundamentals to help recap on knowledge</p>
-            <a href="https://www.isibang.ac.in/~library/onlinerz/resources/mt-v1.pdf" target="_blank" class="btn btn-secondary">Download PDF</a>
-          </div>
-
-          <div class="resource-card">
-            <h3>✍️ Essay Writing Guide</h3>
-            <p>Master essay structure through this document</p>
-            <a href="https://www.hope.ac.uk/media/gateway/library/documents/helpful-guide-to-essay-writing.pdf" target="_blank" class="btn btn-secondary">Download PDF</a>
-          </div>
-
-          <div class="resource-card">
-            <h3>🔬 Combined Science</h3>
-            <p>Physics, Chemistry & Biology with essential formulas and more</p>
-            <a href="https://www.pearsonschoolsandfecolleges.co.uk/asset-library/pdf/Secondary/science/aqa-gcse-science/revise-samples/revise-aqa-gcse-9-1-combined-science-trilogy-revision-guide-higher.pdf" target="_blank" class="btn btn-secondary">Download PDF</a>
-          </div>
-
-          <div class="resource-card">
-            <h3>📚 English Language</h3>
-            <p>GCSE Level english revision pack</p>
-            <a href="https://riddlesdown.org/wp-content/uploads/2020/01/English-Language-Revision-Pack.pdf" target="_blank" class="btn btn-secondary">Download PDF</a>
-          </div>
+        <h2>📚 KS3 (Key Stage 3) Resources</h2>
+        <p class="section-subtitle">For students aged 11-14 (Years 7-9)</p>
+        <div class="resources-grid" id="ks3-resources">
+          <!-- Resources will be loaded here dynamically -->
         </div>
       </div>
     </section>
 
-    <section class="content-section">
+    <!-- GCSE Resources -->
+    <section class="content-section" id="gcse-section" style="display: none;">
       <div class="container">
-        <h2>Premium Courses & Bundles</h2>
-        <div class="resources-grid">
-          <div class="resource-card premium">
-            <h3>🎯 SAT Mastery Bundle</h3>
-            <p>Complete SAT prep with 10+ practice tests and detailed solutions</p>
-            <p class="price">$49.99</p>
-            <a href="#" class="btn btn-primary" onclick="handlePurchase('SAT Mastery Bundle', 49.99); return false;">Purchase</a>
-          </div>
-
-          <div class="resource-card premium">
-            <h3>📘 ACT Excellence Pack</h3>
-            <p>Comprehensive ACT preparation covering all sections with strategies</p>
-            <p class="price">$49.99</p>
-            <a href="#" class="btn btn-primary" onclick="handlePurchase('ACT Excellence Pack', 49.99); return false;">Purchase</a>
-          </div>
-
-          <div class="resource-card premium">
-            <h3>🧮 Advanced Mathematics</h3>
-            <p>Calculus, linear algebra, and advanced problem-solving techniques</p>
-            <p class="price">$39.99</p>
-            <a href="#" class="btn btn-primary" onclick="handlePurchase('Advanced Mathematics', 39.99); return false;">Purchase</a>
-          </div>
-
-          <div class="resource-card premium">
-            <h3>📖 Literature Masterclass</h3>
-            <p>Deep analysis of classic and contemporary literature with essay templates</p>
-            <p class="price">$39.99</p>
-            <a href="#" class="btn btn-primary" onclick="handlePurchase('Literature Masterclass', 39.99); return false;">Purchase</a>
-          </div>
+        <h2>🎓 GCSE Resources</h2>
+        <p class="section-subtitle">For students aged 14-16 (Years 10-11)</p>
+        <div class="resources-grid" id="gcse-resources">
+          <!-- Resources will be loaded here dynamically -->
         </div>
+      </div>
+    </section>
+
+    <!-- A-Level Resources -->
+    <section class="content-section" id="alevel-section" style="display: none;">
+      <div class="container">
+        <h2>🎯 A-Level Resources</h2>
+        <p class="section-subtitle">For students aged 16-18 (Years 12-13)</p>
+        <div class="resources-grid" id="alevel-resources">
+          <!-- Resources will be loaded here dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- All Levels Resources -->
+    <section class="content-section" id="all-section" style="display: none;">
+      <div class="container">
+        <h2>📖 All Levels Resources</h2>
+        <p class="section-subtitle">Study materials suitable for all educational levels</p>
+        <div class="resources-grid" id="all-resources">
+          <!-- Resources will be loaded here dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- No Resources Message -->
+    <section class="content-section" id="no-resources" style="display: none;">
+      <div class="container" style="text-align: center; padding: 4rem 2rem;">
+        <h2 style="color: var(--text-muted); margin-bottom: 1rem;">No Resources Available Yet</h2>
+        <p style="color: var(--text-muted); font-size: 1.2rem;">Our team is working on adding educational resources. Check back soon!</p>
       </div>
     </section>
 
@@ -143,8 +128,7 @@
     </div>
   </footer>
 
-  <script src="javascript/typewriter.js"></script>
-  <script src="javascript/purchase.js"></script>
+  <script src="javascript/resources-loader.js"></script>
   <script src="javascript/navbar.js"></script>
 </body>
 </html>

@@ -23,12 +23,11 @@
       </button>
       <nav class="navbar">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="services.html" class="nav-link">Services</a>
+        <a href="about.html" class="nav-link">About</a>
         <a href="resources.html" class="nav-link">Resources</a>
-        <a href="testimonials.html" class="nav-link">Testimonials</a>
-        <a href="index.html#contact" class="nav-link">Contact</a>
-        <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
-        <a href="book.html" class="btn btn-primary btn-sm">Book Now</a>
+        <a href="book.html" class="nav-link active">Book Session</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="login.html" class="btn btn-secondary btn-sm login-btn">Login</a>
       </nav>
     </div>
   </header>
@@ -43,45 +42,7 @@
       <div class="container">
         <h2>Available Tutors</h2>
         <div class="tutors-grid">
-          <div class="tutor-card">
-            <div class="tutor-badge">⭐ Highly Rated</div>
-            <h3>John Smith</h3>
-            <p class="tutor-subject">Mathematics & Physics</p>
-            <p class="tutor-rating">4.9/5 (87 reviews)</p>
-            <p>Experienced educator with 8+ years of tutoring expertise. Specializes in exam preparation.</p>
-            <p class="tutor-price">$35/hour</p>
-            <button class="btn btn-primary" onclick="selectTutor('john')">View & Book</button>
-          </div>
-
-          <div class="tutor-card">
-            <div class="tutor-badge">⭐ Popular</div>
-            <h3>Sarah Johnson</h3>
-            <p class="tutor-subject">English & Languages</p>
-            <p class="tutor-rating">4.8/5 (92 reviews)</p>
-            <p>Passionate about literature and language learning with innovative teaching methods.</p>
-            <p class="tutor-price">$30/hour</p>
-            <button class="btn btn-primary" onclick="selectTutor('sarah')">View & Book</button>
-          </div>
-
-          <div class="tutor-card">
-            <div class="tutor-badge">⭐ Expert</div>
-            <h3>Michael Chen</h3>
-            <p class="tutor-subject">Science & Chemistry</p>
-            <p class="tutor-rating">4.9/5 (65 reviews)</p>
-            <p>Specialist in making complex concepts easy to understand through hands-on learning.</p>
-            <p class="tutor-price">$35/hour</p>
-            <button class="btn btn-primary" onclick="selectTutor('michael')">View & Book</button>
-          </div>
-
-          <div class="tutor-card">
-            <div class="tutor-badge">⭐ Certified</div>
-            <h3>Emily Rodriguez</h3>
-            <p class="tutor-subject">Test Prep & Exam Revision</p>
-            <p class="tutor-rating">4.7/5 (120 reviews)</p>
-            <p>Dedicated to helping students achieve their best results with proven strategies.</p>
-            <p class="tutor-price">$40/hour</p>
-            <button class="btn btn-primary" onclick="selectTutor('emily')">View & Book</button>
-          </div>
+          <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">Loading tutors...</p>
         </div>
       </div>
     </section>
@@ -112,10 +73,6 @@
               <label for="tutor">Select Tutor *</label>
               <select id="tutor" name="tutor" required>
                 <option value="">-- Choose a tutor --</option>
-                <option value="john">John Smith - Mathematics & Physics ($35/hr)</option>
-                <option value="sarah">Sarah Johnson - English & Languages ($30/hr)</option>
-                <option value="michael">Michael Chen - Science & Chemistry ($35/hr)</option>
-                <option value="emily">Emily Rodriguez - Test Prep & Exam Revision ($40/hr)</option>
               </select>
             </div>
           </div>
@@ -123,7 +80,8 @@
           <div class="form-row">
             <div class="form-group">
               <label for="session-date">Preferred Date *</label>
-              <input type="date" id="session-date" name="session-date" required>
+              <input type="date" id="session-date" name="session-date" required min="">
+              <small class="form-hint">Select a date for your session</small>
             </div>
 
             <div class="form-group">
@@ -183,17 +141,21 @@
 
           <div class="form-group">
             <label for="subject">Subject Area *</label>
-            <input type="text" id="subject" name="subject" placeholder="e.g., Algebra, Essay Writing" required>
+            <select id="subject" name="subject" required>
+              <option value="">-- Select subject --</option>
+            </select>
+            <small style="color: var(--text-muted); display: block; margin-top: 0.25rem;">Subjects available from your selected tutor</small>
           </div>
 
           <div class="form-group">
             <label for="level">Student Level *</label>
             <select id="level" name="level" required>
               <option value="">-- Select level --</option>
-              <option value="elementary">Elementary (K-5)</option>
-              <option value="middle">Middle School (6-8)</option>
-              <option value="high">High School (9-12)</option>
-              <option value="college">College</option>
+              <option value="KS3">KS3 (Ages 11-14)</option>
+              <option value="GCSE">GCSE (Ages 14-16)</option>
+              <option value="A-Level">A-Level (Ages 16-18)</option>
+              <option value="University">University</option>
+              <option value="Other">Other</option>
             </select>
           </div>
 
@@ -242,7 +204,7 @@
           <div class="value-card">
             <div class="value-icon">💰</div>
             <h3>Flexible Pricing</h3>
-            <p>Pay per session or purchase packages for discounts. Prices range from $30-$50 per hour.</p>
+            <p>Pay per session or purchase packages for discounts. Prices range from £30-£40 per hour.</p>
           </div>
           <div class="value-card">
             <div class="value-icon">🔄</div>
@@ -263,7 +225,7 @@
         <h2>Ready to Book?</h2>
         <p>Choose your tutor and schedule your session above. Payment will be processed securely.</p>
         <div class="cta-buttons">
-          <a href="contact.html" class="btn btn-secondary btn-lg">Have Questions?</a>
+          <a href="index.html#contact" class="btn btn-secondary btn-lg">Have Questions?</a>
         </div>
       </div>
     </section>
@@ -297,6 +259,7 @@
   </footer>
 
   <script src="javascript/typewriter.js"></script>
+  <script src="javascript/api.js"></script>
   <script src="javascript/booking.js"></script>
   <script src="javascript/navbar.js"></script>
 </body>

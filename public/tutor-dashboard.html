@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutor Dashboard - Academic Wizard</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="stars-bg"></div>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <span class="logo-icon">✨</span>
+                <a href="index.html" class="logo">Academic<span class="logo-accent">Wizard</span></a>
+            </div>
+            <button class="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="navbar">
+                <a href="tutor-dashboard.html" class="nav-link active">Dashboard</a>
+                <a href="resources.html" class="nav-link">Resources</a>
+                <a href="#" onclick="logout()" class="btn btn-secondary btn-sm">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main style="padding-top: 100px;">
+        <section class="content-section">
+            <div class="container">
+                <div style="margin-bottom: 2rem;">
+                    <h1>Welcome, <span id="tutor-name">Tutor</span>! 👨‍🏫</h1>
+                    <p style="color: var(--text-secondary);">Manage your tutoring sessions</p>
+                </div>
+                
+                <!-- Stats Overview -->
+                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
+                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Total Sessions</h3>
+                        <p id="total-sessions" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                    </div>
+                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
+                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">This Week</h3>
+                        <p id="week-sessions" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                    </div>
+                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
+                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Total Earned</h3>
+                        <p id="total-earned" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">£0</p>
+                    </div>
+                </div>
+
+                <!-- My Sessions -->
+                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg);">
+                    <h2 style="margin-bottom: 1.5rem;">My Booked Sessions</h2>
+                    <div id="sessions-list" style="overflow-x: auto;">
+                        <p style="color: var(--text-muted);">Loading your sessions...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Academic Wizard</h3>
+                    <p>Tutor Dashboard</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Academic Wizard. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="javascript/api.js"></script>
+    <script src="javascript/tutor-dashboard.js"></script>
+    <script src="javascript/navbar.js"></script>
+</body>
+</html>

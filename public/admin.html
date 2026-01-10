@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Academic Wizard</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="stars-bg"></div>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <span class="logo-icon">✨</span>
+                <a href="index.html" class="logo">Academic<span class="logo-accent">Wizard</span></a>
+            </div>
+            <button class="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="navbar">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="admin.html" class="nav-link active">Admin</a>
+                <a href="#" onclick="logout()" class="btn btn-secondary btn-sm">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main style="padding-top: 100px;">
+        <section class="content-section">
+            <div class="container">
+                <h1 style="margin-bottom: 2rem;">Admin Dashboard</h1>
+                
+                <!-- Stats Overview -->
+                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
+                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Total Users</h3>
+                        <p id="total-users" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                    </div>
+                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
+                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Total Bookings</h3>
+                        <p id="total-bookings" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                    </div>
+                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
+                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Tutors</h3>
+                        <p id="total-tutors" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                    </div>
+                </div>
+
+                <!-- Create Tutor Account -->
+                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem;">
+                    <h2 style="margin-bottom: 1.5rem; text-align: center;">Create Tutor Account</h2>
+                    <div id="tutor-messages"></div>
+                    <form id="createTutorForm" style="max-width: 600px; margin: 0 auto;">
+                        <div class="form-group">
+                            <label for="tutor-name">Tutor Name *</label>
+                            <input type="text" id="tutor-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tutor-email">Email *</label>
+                            <input type="email" id="tutor-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tutor-password">Password *</label>
+                            <input type="password" id="tutor-password" required minlength="8">
+                        </div>
+                        <div class="form-group">
+                            <label for="tutor-phone">Phone</label>
+                            <input type="tel" id="tutor-phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="tutor-subjects">Subjects (comma-separated) *</label>
+                            <input type="text" id="tutor-subjects" required placeholder="e.g., Mathematics, Physics, Chemistry">
+                            <small style="color: var(--text-muted);">Separate multiple subjects with commas</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="tutor-rate">Hourly Rate (£) *</label>
+                            <input type="number" id="tutor-rate" required min="10" max="200" step="5" value="35">
+                        </div>
+                        <div class="form-group">
+                            <label for="tutor-bio">Bio/Description</label>
+                            <textarea id="tutor-bio" rows="3" placeholder="Brief description of tutor's experience and expertise"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Tutor Account</button>
+                    </form>
+                </div>
+
+                <!-- Manage Tutors -->
+                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem;">
+                    <h2 style="margin-bottom: 1.5rem;">Manage Tutors</h2>
+                    <div id="tutors-list" style="overflow-x: auto;">
+                        <p style="color: var(--text-muted);">Loading...</p>
+                    </div>
+                </div>
+
+                <!-- Manage Resources -->
+                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem;">
+                    <h2 style="margin-bottom: 1.5rem; text-align: center;">Manage Resources</h2>
+                    <div id="resource-messages"></div>
+                    <form id="uploadResourceForm" style="max-width: 600px; margin: 0 auto 2rem;">
+                        <div class="form-group">
+                            <label for="resource-title">Resource Title *</label>
+                            <input type="text" id="resource-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="resource-level">Level *</label>
+                            <select id="resource-level" required>
+                                <option value="">-- Select Level --</option>
+                                <option value="KS3">KS3 (Ages 11-14)</option>
+                                <option value="GCSE">GCSE (Ages 14-16)</option>
+                                <option value="A-Level">A-Level (Ages 16-18)</option>
+                                <option value="All">All Levels</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="resource-subject">Subject *</label>
+                            <input type="text" id="resource-subject" required placeholder="e.g., Mathematics, Physics">
+                        </div>
+                        <div class="form-group">
+                            <label for="resource-description">Description *</label>
+                            <textarea id="resource-description" rows="3" required placeholder="Brief description of the resource"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="resource-url">Resource URL *</label>
+                            <input type="url" id="resource-url" required placeholder="https://example.com/resource.pdf">
+                            <small style="color: var(--text-muted);">Link to Google Drive, Dropbox, or other file hosting</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Add Resource</button>
+                    </form>
+                    <h3 style="margin-bottom: 1rem;">Current Resources</h3>
+                    <div id="resources-list" style="overflow-x: auto;">
+                        <p style="color: var(--text-muted);">Loading...</p>
+                    </div>
+                </div>
+
+                <!-- Manage Bookings -->
+                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg);">
+                    <h2 style="margin-bottom: 1.5rem;">Manage Bookings</h2>
+                    <div id="bookings-list" style="overflow-x: auto;">
+                        <p style="color: var(--text-muted);">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Academic Wizard</h3>
+                    <p>Admin Dashboard</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Academic Wizard. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Modals -->
+    <div id="modal-overlay" class="modal-overlay" style="display: none;">
+        <!-- Confirm Dialog -->
+        <div id="confirm-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3 id="confirm-title">Confirm Action</h3>
+                <p id="confirm-message"></p>
+                <div class="modal-actions">
+                    <button id="confirm-cancel" class="btn btn-secondary">Cancel</button>
+                    <button id="confirm-ok" class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Tutor Dialog -->
+        <div id="edit-tutor-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Edit Tutor</h3>
+                <form id="edit-tutor-form">
+                    <div class="form-group">
+                        <label for="edit-tutor-name">Name</label>
+                        <input type="text" id="edit-tutor-name" placeholder="Leave blank to skip">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-tutor-phone">Phone</label>
+                        <input type="tel" id="edit-tutor-phone" placeholder="Leave blank to skip">
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" id="edit-tutor-cancel" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Booking Dialog -->
+        <div id="edit-booking-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Edit Booking</h3>
+                <form id="edit-booking-form">
+                    <div class="form-group">
+                        <label for="edit-booking-date">Session Date</label>
+                        <input type="date" id="edit-booking-date" placeholder="Leave blank to skip">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-booking-time">Session Time</label>
+                        <input type="time" id="edit-booking-time" placeholder="Leave blank to skip">
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" id="edit-booking-cancel" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Success/Error Message Dialog -->
+        <div id="message-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3 id="message-title">Success</h3>
+                <p id="message-text"></p>
+                <div class="modal-actions">
+                    <button id="message-ok" class="btn btn-primary">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="javascript/api.js"></script>
+    <script src="javascript/admin.js"></script>
+    <script src="javascript/navbar.js"></script>
+</body>
+</html>

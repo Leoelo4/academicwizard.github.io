@@ -1,63 +1,74 @@
-// Login Form Handler - Connected to Backend API
+// Signup Form Handler - Connected to Backend API
 document.addEventListener('DOMContentLoaded', function() {
-  const loginForm = document.getElementById('loginForm');
+  const signupForm = document.getElementById('signupForm');
   
-  if (loginForm) {
+  if (signupForm) {
     addMessageContainers();
     
-    loginForm.addEventListener('submit', async function(e) {
+    signupForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
-      console.log('Login form submitted');
-      
+      const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
       const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
       const role = document.getElementById('role').value;
       
-      console.log('Form values:', { email, role });
-      
-      if (!email || !password || !role) {
+      // Validation
+      if (!name || !email || !password || !confirmPassword || !role) {
         showError('Please fill in all required fields');
         return;
       }
       
-      const submitBtn = loginForm.querySelector('button[type="submit"]');
+      if (password !== confirmPassword) {
+        showError('Passwords do not match');
+        return;
+      }
+      
+      if (password.length < 8) {
+        showError('Password must be at least 8 characters');
+        return;
+      }
+      
+      const submitBtn = signupForm.querySelector('button[type="submit"]');
       showLoading(submitBtn);
       
       const errorDiv = document.getElementById('error-message');
       if (errorDiv) errorDiv.style.display = 'none';
       
       try {
-        console.log('Calling API.login...');
-        const response = await API.login(email, password, role);
-        console.log('Login response:', response);
+        const userData = {
+          name,
+          email,
+          password,
+          role
+        };
+        
+        if (phone) {
+          userData.phone = phone;
+        }
+        
+        const response = await API.register(userData);
         
         if (response.success) {
-          showSuccess('Login successful! Redirecting...');
+          showSuccess('Account created successfully! Redirecting to login...');
           
           setTimeout(() => {
-            // Redirect based on role
-            if (response.data.role === 'admin') {
-              window.location.href = 'admin.html';
-            } else if (response.data.role === 'tutor') {
-              window.location.href = 'tutor-dashboard.html';
-            } else {
-              window.location.href = 'student-dashboard.html';
-            }
-          }, 1000);
+            window.location.href = 'login.html';
+          }, 2000);
         }
       } catch (error) {
-        console.error('Login error:', error);
         hideLoading(submitBtn);
-        showError(error.message || 'Login failed. Please check your credentials.');
+        showError(error.message || 'Registration failed. Please try again.');
       }
     });
   }
 });
 
 function addMessageContainers() {
-  const loginForm = document.getElementById('loginForm');
-  if (loginForm && !document.getElementById('error-message')) {
+  const signupForm = document.getElementById('signupForm');
+  if (signupForm && !document.getElementById('error-message')) {
     const errorDiv = document.createElement('div');
     errorDiv.id = 'error-message';
     errorDiv.style.display = 'none';
@@ -68,8 +79,8 @@ function addMessageContainers() {
     successDiv.style.display = 'none';
     successDiv.className = 'message-box success-message';
     
-    loginForm.insertBefore(errorDiv, loginForm.firstChild);
-    loginForm.insertBefore(successDiv, loginForm.firstChild);
+    signupForm.insertBefore(errorDiv, signupForm.firstChild);
+    signupForm.insertBefore(successDiv, signupForm.firstChild);
   }
 }
 
@@ -92,10 +103,10 @@ function showSuccess(message) {
 function showLoading(btn) {
   btn.disabled = true;
   btn.dataset.originalText = btn.textContent;
-  btn.textContent = 'Loading...';
+  btn.textContent = 'Creating Account...';
 }
 
 function hideLoading(btn) {
   btn.disabled = false;
-  btn.textContent = btn.dataset.originalText || 'Sign In';
+  btn.textContent = btn.dataset.originalText || 'Create Account';
 }
