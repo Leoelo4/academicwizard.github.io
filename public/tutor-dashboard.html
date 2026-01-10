@@ -29,41 +29,41 @@
         </div>
     </header>
 
-    <main style="padding-top: 100px;">
+    <main class="dashboard-main">
         <section class="content-section">
             <div class="container">
-                <div style="margin-bottom: 2rem;">
+                <div class="dashboard-header">
                     <h1>Welcome, <span id="tutor-name">Tutor</span>! 👨‍🏫</h1>
-                    <p style="color: var(--text-secondary);">Manage your tutoring sessions</p>
+                    <p class="dashboard-subtitle">Manage your tutoring sessions</p>
                 </div>
                 
                 <!-- Stats Overview -->
-                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
-                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
-                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Total Sessions</h3>
-                        <p id="total-sessions" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Sessions</h3>
+                        <p id="total-sessions" class="stat-value">-</p>
                     </div>
-                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
-                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">This Week</h3>
-                        <p id="week-sessions" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                    <div class="stat-card">
+                        <h3>This Week</h3>
+                        <p id="week-sessions" class="stat-value">-</p>
                     </div>
-                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
-                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Total Earned</h3>
-                        <p id="total-earned" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">£0</p>
+                    <div class="stat-card">
+                        <h3>Total Earned</h3>
+                        <p id="total-earned" class="stat-value">£0</p>
                     </div>
                 </div>
 
                 <!-- My Sessions -->
-                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); position: relative; margin-top: 3rem;">
-                    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);"></div>
-                    <h2 style="margin-bottom: 1.5rem;">My Booked Sessions</h2>
-                    <div class="search-bar" style="margin-bottom: 1.5rem;">
-                        <input type="text" id="sessions-search" placeholder="🔍 Search sessions by student, subject, or date..." style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-primary); border: 1px solid rgba(184, 197, 214, 0.2); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem;">
+                <div class="admin-section with-divider">
+                    <div class="section-divider"></div>
+                    <h2>My Booked Sessions</h2>
+                    <div class="search-bar">
+                        <input type="text" id="sessions-search" placeholder="🔍 Search sessions by student, subject, or date...">
                     </div>
-                    <div id="sessions-list" style="overflow-x: auto;">
+                    <div id="sessions-list" class="list-container">
                         <p style="color: var(--text-muted);">Loading your sessions...</p>
                     </div>
-                    <div id="sessions-pagination" class="pagination" style="display: none; margin-top: 1.5rem; text-align: center;"></div>
+                    <div id="sessions-pagination" class="pagination pagination-wrapper"></div>
                 </div>
             </div>
         </section>

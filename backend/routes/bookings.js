@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const Booking = require('../models/Booking');
 const { protect } = require('../middleware/auth');
@@ -10,6 +11,7 @@ const { sendBookingConfirmation } = require('../utils/email');
 router.post('/', async (req, res) => {
   try {
     const {
+      studentId,
       studentName,
       studentEmail,
       studentPhone,
@@ -24,6 +26,20 @@ router.post('/', async (req, res) => {
     } = req.body;
 
     const User = require('../models/User');
+    let authStudent = null;
+    const authHeader = req.headers.authorization || '';
+    if (authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const maybeStudent = await User.findById(decoded.id);
+        if (maybeStudent && maybeStudent.role === 'student') {
+          authStudent = maybeStudent;
+        }
+      } catch (err) {
+        // Ignore token errors for public booking flow
+      }
+    }
     
     // Find the tutor by ID
     const tutorUser = await User.findById(tutor);
@@ -50,20 +66,33 @@ router.post('/', async (req, res) => {
 
     const bookingReference = generateReference();
 
-    // Create booking with actual tutor user
-    // Use system user for student (or create a guest user)
-    let systemUser = await User.findOne({ email: 'system@academicwizard.com' });
-    if (!systemUser) {
-      systemUser = await User.create({
-        name: 'System',
-        email: 'system@academicwizard.com',
-        password: 'systemuser123',
-        role: 'admin'
-      });
+    // Resolve student user
+    let studentUser = null;
+    if (authStudent) {
+      studentUser = authStudent;
+    } else if (studentId) {
+      studentUser = await User.findById(studentId);
+      if (!studentUser || studentUser.role !== 'student') {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid student account'
+        });
+      }
+    } else {
+      // Fallback to system user for guest bookings
+      studentUser = await User.findOne({ email: 'system@academicwizard.com' });
+      if (!studentUser) {
+        studentUser = await User.create({
+          name: 'System',
+          email: 'system@academicwizard.com',
+          password: 'systemuser123',
+          role: 'admin'
+        });
+      }
     }
 
     const booking = await Booking.create({
-      student: systemUser._id,
+      student: studentUser._id,
       tutor: tutorUser._id,
       studentName,
       studentEmail,
@@ -140,14 +169,8 @@ router.get('/my-sessions', protect, async (req, res) => {
     }
 
     // Find all bookings where the tutor email matches
-    // Since bookings currently use system user, we'll match by tutorName containing the tutor's name
-    // In a production system, you'd match by tutor ID
-    const bookings = await Booking.find()
+    const bookings = await Booking.find({ tutor: req.user._id })
       .sort('-sessionDate');
-
-    // Filter bookings for this tutor
-    // For now, show all bookings since the system doesn't have proper tutor assignment
-    // In production, you would filter by: { tutor: req.user._id }
     
     res.status(200).json({
       success: true,

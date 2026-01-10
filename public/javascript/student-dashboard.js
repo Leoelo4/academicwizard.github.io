@@ -53,6 +53,7 @@ async function loadMyLessons() {
       let html = '<table style="width: 100%; border-collapse: collapse;">';
       html += '<thead><tr style="border-bottom: 1px solid rgba(102, 126, 234, 0.2);">';
       html += '<th style="padding: 1rem; text-align: left;">Reference</th>';
+      html += '<th style="padding: 1rem; text-align: left;">Tutor</th>';
       html += '<th style="padding: 1rem; text-align: left;">Subject</th>';
       html += '<th style="padding: 1rem; text-align: left;">Date</th>';
       html += '<th style="padding: 1rem; text-align: left;">Time</th>';
@@ -67,11 +68,13 @@ async function loadMyLessons() {
       bookings.forEach(booking => {
         const date = new Date(booking.sessionDate).toLocaleDateString('en-GB');
         const isPast = new Date(booking.sessionDate) < now;
+        const tutorName = (booking.tutor && booking.tutor.name) || booking.tutorName || 'Tutor';
         const statusColor = isPast ? 'var(--text-muted)' : 'var(--success)';
         const statusText = isPast ? 'Completed' : booking.status || 'Pending';
         
         html += `<tr style="border-bottom: 1px solid rgba(102, 126, 234, 0.1);">`;
         html += `<td style="padding: 1rem;">${booking.bookingReference}</td>`;
+        html += `<td style="padding: 1rem;">${tutorName}</td>`;
         html += `<td style="padding: 1rem;">${booking.subject}</td>`;
         html += `<td style="padding: 1rem;">${date}</td>`;
         html += `<td style="padding: 1rem;">${booking.sessionTime}</td>`;

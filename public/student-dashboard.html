@@ -30,41 +30,41 @@
         </div>
     </header>
 
-    <main style="padding-top: 100px;">
+    <main class="dashboard-main">
         <section class="content-section">
             <div class="container">
-                <div style="margin-bottom: 2rem;">
+                <div class="dashboard-header">
                     <h1>Welcome, <span id="user-name">Student</span>! 👋</h1>
-                    <p style="color: var(--text-secondary);">Here's your learning dashboard</p>
+                    <p class="dashboard-subtitle">Here's your learning dashboard</p>
                 </div>
                 
                 <!-- Quick Actions -->
-                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
-                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
-                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Total Sessions</h3>
-                        <p id="total-sessions" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Sessions</h3>
+                        <p id="total-sessions" class="stat-value">-</p>
                     </div>
-                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
-                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Upcoming</h3>
-                        <p id="upcoming-sessions" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                    <div class="stat-card">
+                        <h3>Upcoming</h3>
+                        <p id="upcoming-sessions" class="stat-value">-</p>
                     </div>
-                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2); cursor: pointer;" onclick="window.location.href='book.html'">
-                        <h3 style="color: var(--success); margin-bottom: 0.5rem;">📅 Book New Session</h3>
-                        <p style="font-size: 1.2rem; color: var(--text-secondary);">Schedule with a tutor</p>
+                    <div class="stat-card clickable" onclick="window.location.href='book.html'">
+                        <h3 class="success-text">📅 Book New Session</h3>
+                        <p class="stat-text">Schedule with a tutor</p>
                     </div>
                 </div>
 
                 <!-- My Lessons -->
-                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); position: relative; margin-top: 3rem;">
-                    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);"></div>
-                    <h2 style="margin-bottom: 1.5rem;">My Lessons</h2>
-                    <div class="search-bar" style="margin-bottom: 1.5rem;">
-                        <input type="text" id="lessons-search" placeholder="🔍 Search lessons by tutor, subject, or date..." style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-primary); border: 1px solid rgba(184, 197, 214, 0.2); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem;">
+                <div class="admin-section with-divider">
+                    <div class="section-divider"></div>
+                    <h2>My Lessons</h2>
+                    <div class="search-bar">
+                        <input type="text" id="lessons-search" placeholder="🔍 Search lessons by tutor, subject, or date...">
                     </div>
-                    <div id="lessons-list" style="overflow-x: auto;">
+                    <div id="lessons-list" class="list-container">
                         <p style="color: var(--text-muted);">Loading your lessons...</p>
                     </div>
-                    <div id="lessons-pagination" class="pagination" style="display: none; margin-top: 1.5rem; text-align: center;"></div>
+                    <div id="lessons-pagination" class="pagination pagination-wrapper"></div>
                 </div>
             </div>
         </section>

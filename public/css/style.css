@@ -1926,6 +1926,152 @@ body {
 }
 
 /* ============================================
+   DASHBOARD STYLES
+   ============================================ */
+.dashboard-main {
+  padding-top: 100px;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-subtitle {
+  color: var(--text-secondary);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.stat-card.clickable {
+  cursor: pointer;
+}
+
+.stat-card h3 {
+  color: var(--brand-accent);
+  margin-bottom: 0.5rem;
+}
+
+.stat-card .stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-card .stat-text {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.stat-card h3.success-text {
+  color: var(--success);
+}
+
+.admin-section {
+  background: var(--bg-card);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  margin-bottom: 2rem;
+}
+
+.admin-section.with-divider {
+  position: relative;
+  margin-top: 3rem;
+}
+
+.admin-section .section-divider {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 600px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);
+}
+
+.admin-section h2 {
+  margin-bottom: 1.5rem;
+}
+
+.admin-section h2.centered {
+  text-align: center;
+}
+
+.admin-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.admin-form .btn-primary {
+  width: 100%;
+}
+
+.search-bar {
+  margin-bottom: 1.5rem;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-primary);
+  border: 1px solid rgba(184, 197, 214, 0.2);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.resources-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 2rem;
+}
+
+.resources-header h3 {
+  margin: 0;
+}
+
+.resources-header .search-bar {
+  flex: 1;
+  max-width: 400px;
+  margin-bottom: 0;
+}
+
+.horizontal-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);
+  margin: 2.5rem 0 2rem 0;
+}
+
+.list-container {
+  overflow-x: auto;
+}
+
+.pagination-wrapper {
+  display: none;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.pagination-wrapper.active {
+  display: block;
+}
+
+/* ============================================
    FOOTER
    ============================================ */
 .footer {

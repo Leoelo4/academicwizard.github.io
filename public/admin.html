@@ -29,32 +29,32 @@
         </div>
     </header>
 
-    <main style="padding-top: 100px;">
+    <main class="dashboard-main">
         <section class="content-section">
             <div class="container">
-                <h1 style="margin-bottom: 2rem;">Admin Dashboard</h1>
+                <h1 class="dashboard-header">Admin Dashboard</h1>
                 
                 <!-- Stats Overview -->
-                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
-                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
-                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Total Users</h3>
-                        <p id="total-users" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Users</h3>
+                        <p id="total-users" class="stat-value">-</p>
                     </div>
-                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
-                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Total Bookings</h3>
-                        <p id="total-bookings" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                    <div class="stat-card">
+                        <h3>Total Bookings</h3>
+                        <p id="total-bookings" class="stat-value">-</p>
                     </div>
-                    <div class="stat-card" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(102, 126, 234, 0.2);">
-                        <h3 style="color: var(--brand-accent); margin-bottom: 0.5rem;">Tutors</h3>
-                        <p id="total-tutors" style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary);">-</p>
+                    <div class="stat-card">
+                        <h3>Tutors</h3>
+                        <p id="total-tutors" class="stat-value">-</p>
                     </div>
                 </div>
 
                 <!-- Create Tutor Account -->
-                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem;">
-                    <h2 style="margin-bottom: 1.5rem; text-align: center;">Create Tutor Account</h2>
+                <div class="admin-section">
+                    <h2 class="centered">Create Tutor Account</h2>
                     <div id="tutor-messages"></div>
-                    <form id="createTutorForm" style="max-width: 600px; margin: 0 auto;">
+                    <form id="createTutorForm" class="admin-form">
                         <div class="form-group">
                             <label for="tutor-name">Tutor Name *</label>
                             <input type="text" id="tutor-name" required>
@@ -84,29 +84,29 @@
                             <label for="tutor-bio">Bio/Description</label>
                             <textarea id="tutor-bio" rows="3" placeholder="Brief description of tutor's experience and expertise"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Tutor Account</button>
+                        <button type="submit" class="btn btn-primary">Create Tutor Account</button>
                     </form>
                 </div>
 
                 <!-- Manage Tutors -->
-                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem; position: relative; margin-top: 3rem;">
-                    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);"></div>
-                    <h2 style="margin-bottom: 1.5rem;">Manage Tutors</h2>
-                    <div class="search-bar" style="margin-bottom: 1.5rem;">
-                        <input type="text" id="tutors-search" placeholder="🔍 Search tutors by name, email, or subject..." style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-primary); border: 1px solid rgba(184, 197, 214, 0.2); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem;">
+                <div class="admin-section with-divider">
+                    <div class="section-divider"></div>
+                    <h2>Manage Tutors</h2>
+                    <div class="search-bar">
+                        <input type="text" id="tutors-search" placeholder="🔍 Search tutors by name, email, or subject...">
                     </div>
-                    <div id="tutors-list" style="overflow-x: auto;">
+                    <div id="tutors-list" class="list-container">
                         <p style="color: var(--text-muted);">Loading...</p>
                     </div>
-                    <div id="tutors-pagination" class="pagination" style="display: none; margin-top: 1.5rem; text-align: center;"></div>
+                    <div id="tutors-pagination" class="pagination pagination-wrapper"></div>
                 </div>
 
                 <!-- Manage Resources -->
-                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem; position: relative; margin-top: 3rem;">
-                    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);"></div>
-                    <h2 style="margin-bottom: 1.5rem; text-align: center;">Manage Resources</h2>
+                <div class="admin-section with-divider">
+                    <div class="section-divider"></div>
+                    <h2 class="centered">Manage Resources</h2>
                     <div id="resource-messages"></div>
-                    <form id="uploadResourceForm" style="max-width: 600px; margin: 0 auto 2rem;">
+                    <form id="uploadResourceForm" class="admin-form">
                         <div class="form-group">
                             <label for="resource-title">Resource Title *</label>
                             <input type="text" id="resource-title" required>
@@ -134,32 +134,32 @@
                             <input type="url" id="resource-url" required placeholder="https://example.com/resource.pdf">
                             <small style="color: var(--text-muted);">Link to Google Drive, Dropbox, or other file hosting</small>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Add Resource</button>
+                        <button type="submit" class="btn btn-primary">Add Resource</button>
                     </form>
-                    <div style="width: 100%; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent); margin: 2.5rem 0 2rem 0;"></div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 2rem;">
-                        <h3 style="margin: 0;">Current Resources</h3>
-                        <div class="search-bar" style="flex: 1; max-width: 400px;">
-                            <input type="text" id="resources-search" placeholder="🔍 Search resources..." style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-primary); border: 1px solid rgba(184, 197, 214, 0.2); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem;">
+                    <div class="horizontal-divider"></div>
+                    <div class="resources-header">
+                        <h3>Current Resources</h3>
+                        <div class="search-bar">
+                            <input type="text" id="resources-search" placeholder="🔍 Search resources...">
                         </div>
                     </div>
-                    <div id="resources-list" style="overflow-x: auto;">
+                    <div id="resources-list" class="list-container">
                         <p style="color: var(--text-muted);">Loading...</p>
                     </div>
-                    <div id="resources-pagination" class="pagination" style="display: none; margin-top: 1.5rem; text-align: center;"></div>
+                    <div id="resources-pagination" class="pagination pagination-wrapper"></div>
                 </div>
 
                 <!-- Manage Bookings -->
-                <div class="admin-section" style="background: var(--bg-card); padding: 2rem; border-radius: var(--radius-lg); position: relative; margin-top: 3rem;">
-                    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; height: 1px; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);"></div>
-                    <h2 style="margin-bottom: 1.5rem;">Manage Bookings</h2>
-                    <div class="search-bar" style="margin-bottom: 1.5rem;">
-                        <input type="text" id="bookings-search" placeholder="🔍 Search bookings by student, tutor, or subject..." style="width: 100%; padding: 0.75rem 1rem; background: var(--bg-primary); border: 1px solid rgba(184, 197, 214, 0.2); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem;">
+                <div class="admin-section with-divider">
+                    <div class="section-divider"></div>
+                    <h2>Manage Bookings</h2>
+                    <div class="search-bar">
+                        <input type="text" id="bookings-search" placeholder="🔍 Search bookings by student, tutor, or subject...">
                     </div>
-                    <div id="bookings-list" style="overflow-x: auto;">
+                    <div id="bookings-list" class="list-container">
                         <p style="color: var(--text-muted);">Loading...</p>
                     </div>
-                    <div id="bookings-pagination" class="pagination" style="display: none; margin-top: 1.5rem; text-align: center;"></div>
+                    <div id="bookings-pagination" class="pagination pagination-wrapper"></div>
                 </div>
             </div>
         </section>

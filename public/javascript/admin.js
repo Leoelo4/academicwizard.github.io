@@ -74,8 +74,32 @@ function showMessage(title, message, isSuccess = true) {
 document.addEventListener('DOMContentLoaded', async function() {
   // Check if user is admin
   const token = localStorage.getItem('authToken');
+  const userData = localStorage.getItem('userData');
+  
   if (!token) {
     window.location.href = 'login.html';
+    return;
+  }
+  
+  // Check if user is admin
+  let user = null;
+  try {
+    user = JSON.parse(userData);
+  } catch (e) {
+    console.error('Failed to parse user data');
+  }
+  
+  if (!user || user.role !== 'admin') {
+    document.body.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: center; height: 100vh; background: var(--bg-primary); color: var(--error);">
+        <div style="text-align: center;">
+          <h1>Access Denied</h1>
+          <p>This page is for administrators only.</p>
+          <p>You are logged in as: <strong>${user ? user.role : 'unknown'}</strong></p>
+          <button onclick="location.href='login.html'" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--brand-primary); color: white; border: none; border-radius: 0.5rem; cursor: pointer;">Go to Login</button>
+        </div>
+      </div>
+    `;
     return;
   }
 
@@ -106,10 +130,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function loadStats() {
   try {
+    const token = localStorage.getItem('authToken');
+    
     // Get all users
     const usersResponse = await fetch('http://localhost:5000/api/users', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }
     });
     
@@ -120,12 +147,15 @@ async function loadStats() {
       document.getElementById('total-users').textContent = users.length;
       document.getElementById('total-tutors').textContent = 
         users.filter(u => u.role === 'tutor').length;
+    } else {
+      console.error('Failed to load users:', usersResponse.status);
     }
 
     // Get all bookings
     const bookingsResponse = await fetch('http://localhost:5000/api/bookings/all', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }
     });
 
@@ -133,6 +163,8 @@ async function loadStats() {
       const bookingsData = await bookingsResponse.json();
       const bookings = bookingsData.data || [];
       document.getElementById('total-bookings').textContent = bookings.length;
+    } else {
+      console.error('Failed to load bookings:', bookingsResponse.status);
     }
   } catch (error) {
     console.error('Error loading stats:', error);
@@ -141,9 +173,17 @@ async function loadStats() {
 
 async function loadRecentBookings() {
   try {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      document.getElementById('bookings-list').innerHTML = 
+        '<p style="color: var(--error);">Not authenticated. Please login again.</p>';
+      return;
+    }
+
     const response = await fetch('http://localhost:5000/api/bookings/all', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }
     });
 
@@ -205,13 +245,13 @@ async function loadRecentBookings() {
       html += '</tbody></table>';
       bookingsList.innerHTML = html;
     } else {
-      document.getElementById('bookings-list').innerHTML = 
-        '<p style="color: var(--error);">Failed to load bookings</p>';
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP ${response.status}`);
     }
   } catch (error) {
     console.error('Error loading bookings:', error);
     document.getElementById('bookings-list').innerHTML = 
-      '<p style="color: var(--error);">Error loading bookings</p>';
+      `<p style="color: var(--error);">Error loading bookings: ${error.message}</p>`;
   }
 }
 
@@ -231,6 +271,11 @@ async function createTutor() {
   messagesDiv.innerHTML = '';
 
   try {
+    // Save admin's current session
+    const adminToken = localStorage.getItem('authToken');
+    const adminUserData = localStorage.getItem('userData');
+
+    // Create tutor via registration
     const response = await API.register({
       name,
       email,
@@ -241,6 +286,12 @@ async function createTutor() {
       hourlyRate: parseFloat(hourlyRate),
       bio
     });
+
+    // Restore admin's session
+    if (adminToken && adminUserData) {
+      localStorage.setItem('authToken', adminToken);
+      localStorage.setItem('userData', adminUserData);
+    }
 
     if (response.success) {
       messagesDiv.innerHTML = `
@@ -269,66 +320,74 @@ function logout() {
 
 async function loadTutors() {
   try {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      document.getElementById('tutors-list').innerHTML = 
+        '<p style="color: var(--error);">Not authenticated. Please login again.</p>';
+      return;
+    }
+
     const response = await fetch('http://localhost:5000/api/users', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      const users = data.data || [];
-      const tutors = users.filter(u => u.role === 'tutor');
-      
-      const tutorsList = document.getElementById('tutors-list');
-      
-      if (tutors.length === 0) {
-        tutorsList.innerHTML = '<p style="color: var(--text-muted);">No tutors yet. Create one using the form above.</p>';
-        return;
-      }
-
-      let html = '<table style="width: 100%; border-collapse: collapse;">';
-      html += '<thead><tr style="border-bottom: 1px solid rgba(102, 126, 234, 0.2);">';
-      html += '<th style="padding: 1rem; text-align: left;">Name</th>';
-      html += '<th style="padding: 1rem; text-align: left;">Email</th>';
-      html += '<th style="padding: 1rem; text-align: left;">Phone</th>';
-      html += '<th style="padding: 1rem; text-align: left;">Subjects</th>';
-      html += '<th style="padding: 1rem; text-align: left;">Rate/Hour</th>';
-      html += '<th style="padding: 1rem; text-align: left;">Created</th>';
-      html += '<th style="padding: 1rem; text-align: left;">Actions</th>';
-      html += '</tr></thead><tbody>';
-
-      tutors.forEach(tutor => {
-        const created = new Date(tutor.createdAt).toLocaleDateString('en-GB');
-        const subjects = tutor.subjects && tutor.subjects.length > 0 
-          ? tutor.subjects.join(', ') 
-          : 'Not specified';
-        const rate = tutor.hourlyRate ? `£${tutor.hourlyRate}` : '£35';
-        
-        html += `<tr style="border-bottom: 1px solid rgba(102, 126, 234, 0.1);">`;
-        html += `<td style="padding: 1rem;">${tutor.name}</td>`;
-        html += `<td style="padding: 1rem;">${tutor.email}</td>`;
-        html += `<td style="padding: 1rem;">${tutor.phone || 'N/A'}</td>`;
-        html += `<td style="padding: 1rem;"><small>${subjects}</small></td>`;
-        html += `<td style="padding: 1rem;"><strong>${rate}</strong></td>`;
-        html += `<td style="padding: 1rem;">${created}</td>`;
-        html += `<td style="padding: 1rem;">`;
-        html += `<button onclick="editTutor('${tutor._id}')" class="btn btn-secondary" style="padding: 0.5rem 1rem; margin-right: 0.5rem; font-size: 0.875rem;">Edit</button>`;
-        html += `<button onclick="deleteTutor('${tutor._id}', '${tutor.name}')" class="btn" style="padding: 0.5rem 1rem; background: #dc3545; font-size: 0.875rem;">Delete</button>`;
-        html += `</td>`;
-        html += `</tr>`;
-      });
-
-      html += '</tbody></table>';
-      tutorsList.innerHTML = html;
-    } else {
-      document.getElementById('tutors-list').innerHTML = 
-        '<p style="color: var(--error);">Failed to load tutors</p>';
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `HTTP ${response.status}`);
     }
+
+    const data = await response.json();
+    const users = data.data || [];
+    const tutors = users.filter(u => u.role === 'tutor');
+    
+    const tutorsList = document.getElementById('tutors-list');
+    
+    if (tutors.length === 0) {
+      tutorsList.innerHTML = '<p style="color: var(--text-muted);">No tutors yet. Create one using the form above.</p>';
+      return;
+    }
+
+    let html = '<table style="width: 100%; border-collapse: collapse;">';
+    html += '<thead><tr style="border-bottom: 1px solid rgba(102, 126, 234, 0.2);">';
+    html += '<th style="padding: 1rem; text-align: left;">Name</th>';
+    html += '<th style="padding: 1rem; text-align: left;">Email</th>';
+    html += '<th style="padding: 1rem; text-align: left;">Phone</th>';
+    html += '<th style="padding: 1rem; text-align: left;">Subjects</th>';
+    html += '<th style="padding: 1rem; text-align: left;">Rate/Hour</th>';
+    html += '<th style="padding: 1rem; text-align: left;">Created</th>';
+    html += '<th style="padding: 1rem; text-align: left;">Actions</th>';
+    html += '</tr></thead><tbody>';
+
+    tutors.forEach(tutor => {
+      const created = new Date(tutor.createdAt).toLocaleDateString('en-GB');
+      const subjects = tutor.subjects && tutor.subjects.length > 0 
+        ? tutor.subjects.join(', ') 
+        : 'Not specified';
+      const rate = tutor.hourlyRate ? `£${tutor.hourlyRate}` : '£35';
+      
+      html += `<tr style="border-bottom: 1px solid rgba(102, 126, 234, 0.1);">`;
+      html += `<td style="padding: 1rem;">${tutor.name}</td>`;
+      html += `<td style="padding: 1rem;">${tutor.email}</td>`;
+      html += `<td style="padding: 1rem;">${tutor.phone || 'N/A'}</td>`;
+      html += `<td style="padding: 1rem;"><small>${subjects}</small></td>`;
+      html += `<td style="padding: 1rem;"><strong>${rate}</strong></td>`;
+      html += `<td style="padding: 1rem;">${created}</td>`;
+      html += `<td style="padding: 1rem;">`;
+      html += `<button onclick="editTutor('${tutor._id}')" class="btn btn-secondary" style="padding: 0.5rem 1rem; margin-right: 0.5rem; font-size: 0.875rem;">Edit</button>`;
+      html += `<button onclick="deleteTutor('${tutor._id}', '${tutor.name}')" class="btn" style="padding: 0.5rem 1rem; background: #dc3545; font-size: 0.875rem;">Delete</button>`;
+      html += `</td>`;
+      html += `</tr>`;
+    });
+
+    html += '</tbody></table>';
+    tutorsList.innerHTML = html;
   } catch (error) {
     console.error('Error loading tutors:', error);
     document.getElementById('tutors-list').innerHTML = 
-      '<p style="color: var(--error);">Error loading tutors</p>';
+      `<p style="color: var(--error);">Error loading tutors: ${error.message}</p>`;
   }
 }
 
@@ -341,10 +400,12 @@ async function deleteTutor(tutorId, tutorName) {
   if (!confirmed) return;
 
   try {
+    const token = localStorage.getItem('authToken');
     const response = await fetch(`http://localhost:5000/api/users/${tutorId}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }
     });
 
@@ -429,7 +490,14 @@ async function editTutor(tutorId) {
 
 async function loadResources() {
   try {
-    const response = await fetch('http://localhost:5000/api/resources');
+    const token = localStorage.getItem('authToken');
+    
+    const response = await fetch('http://localhost:5000/api/resources', {
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+        'Content-Type': 'application/json'
+      }
+    });
 
     if (response.ok) {
       const data = await response.json();
@@ -466,13 +534,13 @@ async function loadResources() {
       html += '</tbody></table>';
       resourcesList.innerHTML = html;
     } else {
-      document.getElementById('resources-list').innerHTML = 
-        '<p style="color: var(--error);">Failed to load resources</p>';
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP ${response.status}`);
     }
   } catch (error) {
     console.error('Error loading resources:', error);
     document.getElementById('resources-list').innerHTML = 
-      '<p style="color: var(--error);">Error loading resources</p>';
+      `<p style="color: var(--error);">Error loading resources: ${error.message}</p>`;
   }
 }
 
@@ -531,10 +599,12 @@ async function deleteResource(resourceId, resourceTitle) {
   if (!confirmed) return;
 
   try {
+    const token = localStorage.getItem('authToken');
     const response = await fetch(`http://localhost:5000/api/resources/${resourceId}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }
     });
 
@@ -625,10 +695,12 @@ async function cancelBooking(bookingId, bookingReference) {
   if (!confirmed) return;
 
   try {
+    const token = localStorage.getItem('authToken');
     const response = await fetch(`http://localhost:5000/api/bookings/${bookingId}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }
     });
 

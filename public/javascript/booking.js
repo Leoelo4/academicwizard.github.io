@@ -22,7 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Listen for tutor selection to check availability
   const tutorSelect = document.getElementById('tutor');
   if (tutorSelect) {
-    tutorSelect.addEventListener('change', checkTutorAvailability);
+    tutorSelect.addEventListener('change', function() {
+      updateSubjectOptions();
+      checkTutorAvailability();
+    });
   }
   
   if (bookingForm) {
@@ -34,7 +37,10 @@ document.addEventListener('DOMContentLoaded', function() {
     bookingForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+
       const formData = {
+        studentId: userData.id || userData._id || null,
         studentName: document.getElementById('student-name').value,
         studentEmail: document.getElementById('email').value,
         studentPhone: document.getElementById('phone').value || null,
@@ -201,6 +207,76 @@ function addBookingMessageContainers() {
   }
 }
 
+// Store tutors data globally for access
+let allTutors = [];
+
+// Update subject dropdown based on selected tutor
+function updateSubjectOptions() {
+  const tutorSelect = document.getElementById('tutor');
+  const subjectSelect = document.getElementById('subject');
+  
+  if (!tutorSelect || !subjectSelect) return;
+  
+  const selectedTutorId = tutorSelect.value;
+  
+  // Reset subject dropdown
+  subjectSelect.innerHTML = '<option value="">-- Select subject --</option>';
+  
+  if (!selectedTutorId) {
+    // If no tutor selected, show all subjects from all tutors
+    const allSubjects = new Set();
+    allTutors.forEach(tutor => {
+      if (tutor.subjects && Array.isArray(tutor.subjects) && tutor.subjects.length > 0) {
+        tutor.subjects.forEach(subject => {
+          if (subject && subject.trim()) {
+            allSubjects.add(subject.trim());
+          }
+        });
+      }
+    });
+    
+    if (allSubjects.size === 0) {
+      // No subjects available
+      const option = document.createElement('option');
+      option.value = '';
+      option.textContent = 'No subjects available - Admin must add subjects to tutors';
+      option.disabled = true;
+      subjectSelect.appendChild(option);
+      return;
+    }
+    
+    // Sort and add all unique subjects
+    const sortedSubjects = [...allSubjects].sort();
+    sortedSubjects.forEach(subject => {
+      const option = document.createElement('option');
+      option.value = subject;
+      option.textContent = subject;
+      subjectSelect.appendChild(option);
+    });
+  } else {
+    // Show only selected tutor's subjects
+    const selectedTutor = allTutors.find(t => t._id === selectedTutorId);
+    
+    if (selectedTutor && selectedTutor.subjects && Array.isArray(selectedTutor.subjects) && selectedTutor.subjects.length > 0) {
+      selectedTutor.subjects.forEach(subject => {
+        if (subject && subject.trim()) {
+          const option = document.createElement('option');
+          option.value = subject.trim();
+          option.textContent = subject.trim();
+          subjectSelect.appendChild(option);
+        }
+      });
+    } else {
+      // Selected tutor has no subjects
+      const option = document.createElement('option');
+      option.value = '';
+      option.textContent = 'This tutor has no subjects - Contact admin';
+      option.disabled = true;
+      subjectSelect.appendChild(option);
+    }
+  }
+}
+
 // Load tutors from database
 async function loadTutors() {
   try {
@@ -209,6 +285,8 @@ async function loadTutors() {
     if (response.ok) {
       const data = await response.json();
       const tutors = data.data || [];
+      
+      console.log('Tutors loaded:', tutors.length);
       
       // Update tutor cards
       const tutorsGrid = document.querySelector('.tutors-grid');
@@ -221,13 +299,15 @@ async function loadTutors() {
               ? tutor.subjects.join(' & ') 
               : 'Multiple Subjects';
             const rate = tutor.hourlyRate || 35;
+            const name = tutor.name || 'Tutor';
+            const bio = tutor.bio || 'Experienced tutor ready to help you succeed.';
             
             return `
               <div class="tutor-card">
                 <div class="tutor-badge">⭐ Available</div>
-                <h3>${tutor.name}</h3>
+                <h3>${name}</h3>
                 <p class="tutor-subject">${subjects}</p>
-                <p>${tutor.bio || 'Experienced tutor ready to help you succeed.'}</p>
+                <p>${bio}</p>
                 <p class="tutor-price">£${rate}/hour</p>
                 <button class="btn btn-primary" onclick="selectTutor('${tutor._id}')">View & Book</button>
               </div>
@@ -245,44 +325,25 @@ async function loadTutors() {
             ? tutor.subjects.join(', ') 
             : 'Multiple Subjects';
           const rate = tutor.hourlyRate || 35;
+          const name = tutor.name || 'Tutor';
           const option = document.createElement('option');
           option.value = tutor._id;
-          option.textContent = `${tutor.name} - ${subjects} (£${rate}/hr)`;
+          option.textContent = `${name} - ${subjects} (£${rate}/hr)`;
           tutorSelect.appendChild(option);
         });
       }
       
-      // Populate subject dropdown with unique subjects from all tutors
-      const subjectSelect = document.getElementById('subject');
-      if (subjectSelect) {
-        const allSubjects = new Set();
-        tutors.forEach(tutor => {
-          if (tutor.subjects && tutor.subjects.length > 0) {
-            tutor.subjects.forEach(subject => allSubjects.add(subject.trim()));
-          }
-        });
-        
-        if (allSubjects.size > 0) {
-          // Keep the first option, replace the rest
-          const currentValue = subjectSelect.value;
-          const firstOption = subjectSelect.options[0];
-          subjectSelect.innerHTML = '';
-          subjectSelect.appendChild(firstOption);
-          
-          [...allSubjects].sort().forEach(subject => {
-            const option = document.createElement('option');
-            option.value = subject;
-            option.textContent = subject;
-            subjectSelect.appendChild(option);
-          });
-          
-          if (currentValue) {
-            subjectSelect.value = currentValue;
-          }
-        }
-      }
+      // Store tutors globally for subject filtering
+      allTutors = tutors;
+      
+      // Populate subject dropdown with all unique subjects initially
+      updateSubjectOptions();
+    } else {
+      console.error('Failed to load tutors. Status:', response.status);
+      document.querySelector('.tutors-grid').innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--error); padding: 3rem;">Failed to load tutors. Please refresh the page.</p>';
     }
   } catch (error) {
     console.error('Error loading tutors:', error);
+    document.querySelector('.tutors-grid').innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--error); padding: 3rem;">Error loading tutors: ' + error.message + '</p>';
   }
 }

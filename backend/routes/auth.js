@@ -15,7 +15,7 @@ const generateToken = (id) => {
 // @access  Public
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, phone, role } = req.body;
+    const { name, email, password, phone, role, subjects, hourlyRate, bio } = req.body;
 
     // Check if user exists
     const userExists = await User.findOne({ email });
@@ -26,14 +26,24 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    // Create user
-    const user = await User.create({
+    // Prepare user data
+    const userData = {
       name,
       email,
       password,
       phone,
       role: role || 'student'
-    });
+    };
+
+    // Add tutor-specific fields if role is tutor
+    if (role === 'tutor') {
+      if (subjects) userData.subjects = subjects;
+      if (hourlyRate) userData.hourlyRate = hourlyRate;
+      if (bio) userData.bio = bio;
+    }
+
+    // Create user
+    const user = await User.create(userData);
 
     // Generate token
     const token = generateToken(user._id);
