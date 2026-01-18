@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book a Session - Academic Wizard</title>
   <link rel="stylesheet" href="css/style.css">
+  <!-- Flatpickr CSS for enhanced calendar -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
   <div class="animated-bg"></div>
@@ -34,8 +36,8 @@
 
   <main>
     <section class="page-hero">
-      <h1>Book Your Tutoring Session</h1>
-      <p>Select your tutor, choose a time, and start your journey to success</p>
+      <h1>Book Your Session</h1>
+      <p>Pick a tutor you vibe with, choose a time that works, and let's make it happen!</p>
     </section>
 
     <section class="content-section">
@@ -164,8 +166,50 @@
             <textarea id="notes" name="notes" rows="4" placeholder="Tell us more about what you need help with, your goals, or any specific challenges..."></textarea>
           </div>
 
+          <!-- Payment Method Selection -->
+          <div class="form-group payment-method-group">
+            <label>Payment Method *</label>
+            <div class="payment-options">
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="stripe" checked>
+                <span class="payment-label">
+                  <span class="payment-icon">💳</span>
+                  <span>Credit/Debit Card (Stripe)</span>
+                </span>
+              </label>
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="pay-later">
+                <span class="payment-label">
+                  <span class="payment-icon">📧</span>
+                  <span>Pay Later (Invoice)</span>
+                </span>
+              </label>
+            </div>
+            <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
+              Select "Pay Later" to receive an invoice and pay at a later time.
+            </small>
+          </div>
+
+          <!-- Price Estimate -->
+          <div class="price-estimate-box" id="price-estimate" style="display: none;">
+            <div class="estimate-row">
+              <span>Hourly Rate:</span>
+              <span id="hourly-rate">£35.00</span>
+            </div>
+            <div class="estimate-row">
+              <span>Duration:</span>
+              <span id="duration-display">-</span>
+            </div>
+            <div class="estimate-row total-row">
+              <span>Estimated Total:</span>
+              <span id="total-price">£0.00</span>
+            </div>
+          </div>
+
           <div class="form-submit">
-            <button type="submit" class="btn btn-primary">Book Session</button>
+            <button type="submit" class="btn btn-primary" id="submit-booking-btn">
+              <span id="submit-btn-text">Proceed to Payment</span>
+            </button>
             <p class="form-note">* Required fields. You'll receive a confirmation email shortly.</p>
           </div>
         </form>
@@ -216,7 +260,7 @@
         <div class="footer-section">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="services.html">Services</a></li>
+            <li><a href="about.html">Services</a></li>
             <li><a href="resources.html">Resources</a></li>
             <li><a href="testimonials.html">Testimonials</a></li>
           </ul>
@@ -233,6 +277,8 @@
     </div>
   </footer>
 
+  <!-- Flatpickr JS for enhanced calendar -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="javascript/typewriter.js"></script>
   <script src="javascript/api.js"></script>
   <script src="javascript/booking.js"></script>

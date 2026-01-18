@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   loadStats();
   loadRecentBookings();
   loadTutors();
+  loadStudents();
   loadResources();
 
   // Handle tutor creation form
@@ -132,6 +133,8 @@ async function loadStats() {
   try {
     const token = localStorage.getItem('authToken');
     
+    let allUsers = []; // Store users for later use
+    
     // Get all users
     const usersResponse = await fetch('http://localhost:5000/api/users', {
       headers: {
@@ -143,10 +146,20 @@ async function loadStats() {
     if (usersResponse.ok) {
       const usersData = await usersResponse.json();
       const users = usersData.data || [];
+      allUsers = users; // Save for recent activity
+      
+      const students = users.filter(u => u.role === 'student').length;
+      const tutors = users.filter(u => u.role === 'tutor').length;
+      const admins = users.filter(u => u.role === 'admin').length;
       
       document.getElementById('total-users').textContent = users.length;
-      document.getElementById('total-tutors').textContent = 
-        users.filter(u => u.role === 'tutor').length;
+      document.getElementById('total-tutors').textContent = tutors;
+      
+      // Enhanced breakdowns
+      document.getElementById('users-breakdown').textContent = 
+        `${students} students, ${tutors} tutors, ${admins} admins`;
+      document.getElementById('tutors-breakdown').textContent = 
+        `${tutors} active tutors available`;
     } else {
       console.error('Failed to load users:', usersResponse.status);
     }
@@ -162,14 +175,172 @@ async function loadStats() {
     if (bookingsResponse.ok) {
       const bookingsData = await bookingsResponse.json();
       const bookings = bookingsData.data || [];
+      
+      const pending = bookings.filter(b => b.status === 'pending').length;
+      const confirmed = bookings.filter(b => b.status === 'confirmed').length;
+      const completed = bookings.filter(b => b.status === 'completed').length;
+      const cancelled = bookings.filter(b => b.status === 'cancelled').length;
+      
       document.getElementById('total-bookings').textContent = bookings.length;
+      document.getElementById('bookings-breakdown').textContent = 
+        `${pending} pending, ${confirmed} confirmed, ${completed} completed`;
+      
+      // Calculate this week's data
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      
+      const bookingsThisWeek = bookings.filter(b => 
+        new Date(b.createdAt) >= oneWeekAgo
+      ).length;
+      
+      const completedThisWeek = bookings.filter(b => 
+        b.status === 'completed' && new Date(b.updatedAt) >= oneWeekAgo
+      ).length;
+      
+      document.getElementById('bookings-this-week').textContent = bookingsThisWeek;
+      document.getElementById('completed-this-week').textContent = completedThisWeek;
+      document.getElementById('pending-bookings').textContent = pending;
+      
+      // Calculate total revenue
+      const totalRevenue = bookings.reduce((sum, booking) => {
+        return sum + (booking.amount || 0);
+      }, 0);
+      
+      document.getElementById('total-revenue').textContent = `£${totalRevenue.toFixed(2)}`;
+      
+      // Calculate revenue breakdown
+      const paidRevenue = bookings
+        .filter(b => b.paymentStatus === 'paid')
+        .reduce((sum, b) => sum + (b.amount || 0), 0);
+      const pendingRevenue = bookings
+        .filter(b => b.paymentStatus === 'pending')
+        .reduce((sum, b) => sum + (b.amount || 0), 0);
+      
+      document.getElementById('revenue-breakdown').textContent = 
+        `£${paidRevenue.toFixed(2)} paid, £${pendingRevenue.toFixed(2)} pending`;
+      
+      // Calculate active students (students with at least one booking)
+      const uniqueStudentIds = new Set(
+        bookings
+          .filter(b => b.studentId)
+          .map(b => b.studentId)
+      );
+      const activeStudentsCount = uniqueStudentIds.size;
+      
+      document.getElementById('active-students').textContent = activeStudentsCount;
+      
+      // Calculate active students breakdown
+      const studentsThisMonth = bookings.filter(b => {
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        return b.studentId && new Date(b.createdAt) >= oneMonthAgo;
+      });
+      const uniqueStudentsThisMonth = new Set(studentsThisMonth.map(b => b.studentId)).size;
+      
+      document.getElementById('students-breakdown').textContent = 
+        `${uniqueStudentsThisMonth} active this month`;
+      
+      // Load recent activity with both bookings and users
+      loadRecentActivity(bookings, allUsers);
     } else {
       console.error('Failed to load bookings:', bookingsResponse.status);
     }
+
+    // Get all resources
+    const resourcesResponse = await fetch('http://localhost:5000/api/resources', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (resourcesResponse.ok) {
+      const resourcesData = await resourcesResponse.json();
+      const resources = resourcesData.data || [];
+      document.getElementById('total-resources').textContent = resources.length;
+      
+      const subjects = [...new Set(resources.map(r => r.subject))];
+      document.getElementById('resources-breakdown').textContent = 
+        `${subjects.length} subjects covered`;
+    } else {
+      console.error('Failed to load resources:', resourcesResponse.status);
+    }
+
+    // Calculate users this week
+    const usersThisWeek = await calculateUsersThisWeek(token);
+    document.getElementById('users-this-week').textContent = usersThisWeek;
+    
   } catch (error) {
     console.error('Error loading stats:', error);
   }
 }
+
+async function calculateUsersThisWeek(token) {
+  try {
+    const response = await fetch('http://localhost:5000/api/users', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      const users = data.data || [];
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      
+      return users.filter(u => new Date(u.createdAt) >= oneWeekAgo).length;
+    }
+  } catch (error) {
+    console.error('Error calculating users this week:', error);
+  }
+  return 0;
+}
+
+function loadRecentActivity(bookings, users) {
+  const activityList = document.getElementById('recent-activity-list');
+  
+  // Sort bookings by creation date (most recent first)
+  const recentBookings = [...bookings]
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 5);
+  
+  if (recentBookings.length === 0) {
+    activityList.innerHTML = '<li class="activity-item">No recent activity</li>';
+    return;
+  }
+  
+  activityList.innerHTML = recentBookings.map(booking => {
+    const date = new Date(booking.createdAt);
+    const timeAgo = getTimeAgo(date);
+    const studentName = booking.studentName || 'Unknown Student';
+    const subject = booking.subject || 'Unknown Subject';
+    
+    let statusIcon = '📚';
+    if (booking.status === 'confirmed') statusIcon = '✅';
+    if (booking.status === 'completed') statusIcon = '🎓';
+    if (booking.status === 'cancelled') statusIcon = '❌';
+    
+    return `
+      <li class="activity-item">
+        ${statusIcon} <strong>${studentName}</strong> booked <strong>${subject}</strong> 
+        <span style="color: #95a5a6;">${timeAgo}</span>
+      </li>
+    `;
+  }).join('');
+}
+
+function getTimeAgo(date) {
+  const seconds = Math.floor((new Date() - date) / 1000);
+  
+  if (seconds < 60) return 'just now';
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+  if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+  return `${Math.floor(seconds / 604800)}w ago`;
+}
+
 
 async function loadRecentBookings() {
   try {
@@ -384,10 +555,214 @@ async function loadTutors() {
 
     html += '</tbody></table>';
     tutorsList.innerHTML = html;
+
+    // Setup search functionality for tutors
+    const searchInput = document.getElementById('tutors-search');
+    if (searchInput) {
+      // Remove any existing listeners
+      const newSearchInput = searchInput.cloneNode(true);
+      searchInput.parentNode.replaceChild(newSearchInput, searchInput);
+      
+      newSearchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = tutorsList.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+      });
+    }
   } catch (error) {
     console.error('Error loading tutors:', error);
     document.getElementById('tutors-list').innerHTML = 
       `<p style="color: var(--error);">Error loading tutors: ${error.message}</p>`;
+  }
+}
+
+async function loadStudents() {
+  try {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      document.getElementById('students-list').innerHTML = 
+        '<p style="color: var(--error);">Not authenticated. Please login again.</p>';
+      return;
+    }
+
+    const response = await fetch('http://localhost:5000/api/users', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    const users = data.data || [];
+    const students = users.filter(u => u.role === 'student');
+    
+    const studentsList = document.getElementById('students-list');
+    
+    if (students.length === 0) {
+      studentsList.innerHTML = '<p style="color: var(--text-muted);">No students yet.</p>';
+      return;
+    }
+
+    let html = '<table style="width: 100%; border-collapse: collapse;">';
+    html += '<thead><tr style="border-bottom: 1px solid rgba(102, 126, 234, 0.2);">';
+    html += '<th style="padding: 1rem; text-align: left;">Name</th>';
+    html += '<th style="padding: 1rem; text-align: left;">Email</th>';
+    html += '<th style="padding: 1rem; text-align: left;">Phone</th>';
+    html += '<th style="padding: 1rem; text-align: left;">Joined</th>';
+    html += '<th style="padding: 1rem; text-align: left;">Actions</th>';
+    html += '</tr></thead><tbody>';
+
+    students.forEach(student => {
+      const joined = new Date(student.createdAt).toLocaleDateString('en-GB');
+      
+      html += `<tr style="border-bottom: 1px solid rgba(102, 126, 234, 0.1);">`;
+      html += `<td style="padding: 1rem;">${student.name}</td>`;
+      html += `<td style="padding: 1rem;">${student.email}</td>`;
+      html += `<td style="padding: 1rem;">${student.phone || 'N/A'}</td>`;
+      html += `<td style="padding: 1rem;">${joined}</td>`;
+      html += `<td style="padding: 1rem;">`;
+      html += `<button onclick="editStudent('${student._id}')" class="btn btn-secondary" style="padding: 0.5rem 1rem; margin-right: 0.5rem; font-size: 0.875rem;">Edit</button>`;
+      html += `<button onclick="deleteStudent('${student._id}', '${student.name}')" class="btn" style="padding: 0.5rem 1rem; background: #dc3545; font-size: 0.875rem;">Delete</button>`;
+      html += `</td>`;
+      html += `</tr>`;
+    });
+
+    html += '</tbody></table>';
+    studentsList.innerHTML = html;
+
+    // Setup search functionality for students
+    const searchInput = document.getElementById('students-search');
+    if (searchInput) {
+      // Remove any existing listeners
+      const newSearchInput = searchInput.cloneNode(true);
+      searchInput.parentNode.replaceChild(newSearchInput, searchInput);
+      
+      newSearchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = studentsList.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+      });
+    }
+  } catch (error) {
+    console.error('Error loading students:', error);
+    document.getElementById('students-list').innerHTML = 
+      `<p style="color: var(--error);">Error loading students: ${error.message}</p>`;
+  }
+}
+
+async function editStudent(studentId) {
+  return new Promise((resolve) => {
+    document.getElementById('edit-tutor-name').value = '';
+    document.getElementById('edit-tutor-phone').value = '';
+    showModal('edit-tutor-modal');
+
+    // Change title for student editing
+    const modalTitle = document.querySelector('#edit-tutor-modal h3');
+    const originalTitle = modalTitle.textContent;
+    modalTitle.textContent = 'Edit Student';
+
+    const form = document.getElementById('edit-tutor-form');
+    const cancelBtn = document.getElementById('edit-tutor-cancel');
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      
+      const newName = document.getElementById('edit-tutor-name').value.trim();
+      const newPhone = document.getElementById('edit-tutor-phone').value.trim();
+      
+      if (!newName && !newPhone) {
+        await showMessage('Info', 'No changes were made.', true);
+        cleanup();
+        return;
+      }
+
+      const updateData = {};
+      if (newName) updateData.name = newName;
+      if (newPhone) updateData.phone = newPhone;
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/users/${studentId}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updateData)
+        });
+
+        if (response.ok) {
+          cleanup();
+          await showMessage('Success', 'Student updated successfully!', true);
+          loadStudents();
+        } else {
+          const data = await response.json();
+          await showMessage('Error', `Failed to update student: ${data.message || 'Unknown error'}`, false);
+        }
+      } catch (error) {
+        console.error('Error updating student:', error);
+        await showMessage('Error', 'Error updating student. Please try again.', false);
+      }
+    };
+
+    const handleCancel = () => {
+      cleanup();
+    };
+
+    const cleanup = () => {
+      modalTitle.textContent = originalTitle;
+      form.removeEventListener('submit', handleSubmit);
+      cancelBtn.removeEventListener('click', handleCancel);
+      hideAllModals();
+      resolve();
+    };
+
+    form.addEventListener('submit', handleSubmit);
+    cancelBtn.addEventListener('click', handleCancel);
+  });
+}
+
+async function deleteStudent(studentId, studentName) {
+  const confirmed = await showConfirm(
+    'Delete Student',
+    `Are you sure you want to delete "${studentName}"? This action cannot be undone.`
+  );
+  
+  if (!confirmed) return;
+
+  try {
+    const token = localStorage.getItem('authToken');
+    const response = await fetch(`http://localhost:5000/api/users/${studentId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      await showMessage('Success', `Student "${studentName}" has been deleted successfully.`, true);
+      loadStudents();
+      loadStats();
+    } else {
+      const data = await response.json();
+      await showMessage('Error', `Failed to delete student: ${data.message || 'Unknown error'}`, false);
+    }
+  } catch (error) {
+    console.error('Error deleting student:', error);
+    await showMessage('Error', 'Error deleting student. Please try again.', false);
   }
 }
 

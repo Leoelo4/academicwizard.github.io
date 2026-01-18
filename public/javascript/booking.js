@@ -1,12 +1,78 @@
 // Booking Form Handler - Connected to Backend API
 document.addEventListener('DOMContentLoaded', function() {
+  // Check if user is logged in
+  const token = localStorage.getItem('authToken');
+  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+  
+  if (!token || (!userData.id && !userData._id)) {
+    // Show login required message
+    document.querySelector('main').innerHTML = `
+      <section class="page-hero">
+        <h1>Book Your Session</h1>
+        <p>Pick a tutor you vibe with, choose a time that works, and let's make it happen!</p>
+      </section>
+      
+      <section class="content-section" style="padding-top: 2rem;">
+        <div class="container">
+          <div class="card" style="max-width: 600px; margin: 0 auto; padding: 4rem 3rem; text-align: center;">
+            <div style="font-size: 5rem; margin-bottom: 2rem;">🔒</div>
+            <h2 style="margin-bottom: 1.5rem;">Login Required</h2>
+            <p style="color: var(--text-muted); margin-bottom: 3rem; font-size: 1.1rem;">
+              You need to be logged in to book a tutoring session. Please sign in to your account or create a new one to continue.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+              <a href="login.html" class="btn btn-primary">Login to Account</a>
+              <a href="signup.html" class="btn btn-secondary">Create Account</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+    return;
+  }
+  
   const bookingForm = document.getElementById('bookingForm');
   
   // Load tutors from database
   loadTutors();
   
+  // Initialize Flatpickr for enhanced date picking
   const dateInput = document.getElementById('session-date');
-  if (dateInput) {
+  if (dateInput && typeof flatpickr !== 'undefined') {
+    flatpickr(dateInput, {
+      minDate: "today",
+      maxDate: new Date().fp_incr(90), // 90 days from now
+      dateFormat: "Y-m-d",
+      disableMobile: false,
+      onChange: function(selectedDates, dateStr, instance) {
+        // Trigger time filtering when date changes
+        filterAvailableTimes();
+        checkTutorAvailability();
+      },
+      onReady: function(selectedDates, dateStr, instance) {
+        // Add custom styling
+        instance.calendarContainer.style.borderRadius = '12px';
+        instance.calendarContainer.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.2)';
+      },
+      // Disable Sundays (optional - for business scheduling)
+      disable: [
+        function(date) {
+          // Optional: disable Sundays
+          // return (date.getDay() === 0);
+          return false; // Allow all days for now
+        }
+      ],
+      // Highlight available days
+      onDayCreate: function(dObj, dStr, fp, dayElem) {
+        // You could mark certain days as popular/busy here
+        const day = dayElem.dateObj.getDay();
+        if (day === 6 || day === 0) { // Weekends
+          dayElem.innerHTML += "<span class='weekend-marker'>📅</span>";
+        }
+      }
+    });
+  } else if (dateInput) {
+    // Fallback for browsers/environments without flatpickr
     const today = new Date().toISOString().split('T')[0];
     dateInput.setAttribute('min', today);
     
@@ -34,13 +100,61 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize time filtering on page load
     filterAvailableTimes();
     
+    // Payment method change handler
+    const paymentMethodInputs = document.querySelectorAll('input[name="payment-method"]');
+    const submitBtn = document.getElementById('submit-booking-btn');
+    const submitBtnText = document.getElementById('submit-btn-text');
+    
+    paymentMethodInputs.forEach(input => {
+      input.addEventListener('change', function() {
+        if (this.value === 'stripe') {
+          submitBtnText.textContent = 'Proceed to Payment';
+        } else {
+          submitBtnText.textContent = 'Book Session (Pay Later)';
+        }
+      });
+    });
+    
+    // Duration change handler - update price estimate
+    const durationSelect = document.getElementById('duration');
+    const tutorSelect = document.getElementById('tutor');
+    
+    function updatePriceEstimate() {
+      const duration = parseInt(durationSelect.value);
+      const tutorId = tutorSelect.value;
+      
+      if (duration && tutorId) {
+        // Get tutor's hourly rate
+        const tutorOption = tutorSelect.options[tutorSelect.selectedIndex];
+        const tutorData = tutorOption.dataset.tutor ? JSON.parse(tutorOption.dataset.tutor) : null;
+        const hourlyRate = tutorData && tutorData.hourlyRate ? tutorData.hourlyRate : 35;
+        
+        const hours = duration / 60;
+        const totalPrice = (hourlyRate * hours).toFixed(2);
+        
+        document.getElementById('hourly-rate').textContent = `£${hourlyRate.toFixed(2)}`;
+        document.getElementById('duration-display').textContent = duration >= 60 ? 
+          `${(duration / 60)} hour${duration > 60 ? 's' : ''}` : 
+          `${duration} minutes`;
+        document.getElementById('total-price').textContent = `£${totalPrice}`;
+        document.getElementById('price-estimate').style.display = 'block';
+      } else {
+        document.getElementById('price-estimate').style.display = 'none';
+      }
+    }
+    
+    durationSelect.addEventListener('change', updatePriceEstimate);
+    tutorSelect.addEventListener('change', updatePriceEstimate);
+    
     bookingForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
 
       const formData = {
-        studentId: userData.id || userData._id || null,
+        // Only send studentId if the logged-in user is actually a student
+        studentId: (userData.role === 'student') ? (userData.id || userData._id || null) : null,
         studentName: document.getElementById('student-name').value,
         studentEmail: document.getElementById('email').value,
         studentPhone: document.getElementById('phone').value || null,
@@ -51,7 +165,8 @@ document.addEventListener('DOMContentLoaded', function() {
         sessionType: document.getElementById('session-type').value,
         subject: document.getElementById('subject').value,
         level: document.getElementById('level').value,
-        notes: document.getElementById('notes').value || null
+        notes: document.getElementById('notes').value || null,
+        paymentMethod: paymentMethod
       };
       
       if (!formData.studentName || !formData.studentEmail || !formData.tutor || 
@@ -61,21 +176,81 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
       
-      const submitBtn = bookingForm.querySelector('button[type="submit"]');
-      showLoading(submitBtn);
+      const submitBtnElement = bookingForm.querySelector('button[type="submit"]');
+      showLoading(submitBtnElement);
       
       const errorDiv = document.getElementById('booking-error');
       if (errorDiv) errorDiv.style.display = 'none';
       
       try {
+        console.log('Creating booking with data:', formData);
         const response = await API.createBooking(formData);
+        console.log('Booking response:', response);
         
         if (response.success) {
-          localStorage.setItem('lastBooking', JSON.stringify(response.data));
-          window.location.href = 'confirmation.html';
+          const booking = response.data;
+          localStorage.setItem('lastBooking', JSON.stringify(booking));
+          
+          // If payment method is Stripe, create checkout session
+          if (paymentMethod === 'stripe') {
+            try {
+              // Calculate price
+              const tutorOption = tutorSelect.options[tutorSelect.selectedIndex];
+              const tutorData = tutorOption.dataset.tutor ? JSON.parse(tutorOption.dataset.tutor) : null;
+              const tutorName = tutorData ? tutorData.name : 'Academic Wizard Tutor';
+              const hourlyRate = tutorData && tutorData.hourlyRate ? tutorData.hourlyRate : 35;
+              const hours = formData.duration / 60;
+              const totalPrice = hourlyRate * hours;
+              
+              console.log('Creating payment session:', {
+                bookingId: booking._id || booking.id,
+                amount: totalPrice,
+                subject: formData.subject
+              });
+              
+              const paymentResponse = await fetch('http://localhost:5000/api/payments/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                },
+                body: JSON.stringify({
+                  bookingId: booking._id || booking.id,
+                  amount: totalPrice,
+                  subject: formData.subject,
+                  tutorName: tutorName,
+                  sessionDate: formData.sessionDate
+                })
+              });
+              
+              const paymentData = await paymentResponse.json();
+              console.log('Payment response:', paymentData);
+              
+              if (paymentData.success && paymentData.url) {
+                // Redirect to Stripe checkout
+                window.location.href = paymentData.url;
+              } else {
+                // Fallback to confirmation page
+                console.log('Payment URL not available, redirecting to confirmation');
+                window.location.href = 'confirmation.html';
+              }
+            } catch (paymentError) {
+              console.error('Payment error:', paymentError);
+              hideLoading(submitBtnElement);
+              showError('Payment processing failed: ' + paymentError.message, 'booking-error');
+            }
+          } else {
+            // Pay later - go directly to confirmation
+            window.location.href = 'confirmation.html';
+          }
+        } else {
+          // Booking creation failed
+          hideLoading(submitBtnElement);
+          showError(response.message || 'Booking creation failed. Please try again.', 'booking-error');
         }
       } catch (error) {
-        hideLoading(submitBtn);
+        console.error('Booking error:', error);
+        hideLoading(submitBtnElement);
         showError(error.message || 'Booking failed. Please try again.', 'booking-error');
       }
     });

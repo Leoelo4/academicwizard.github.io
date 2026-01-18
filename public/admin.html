@@ -13,7 +13,7 @@
     <header class="header">
         <div class="container">
             <div class="logo-container">
-                <span class="logo-icon">✨</span>
+                <span class="logo-icon">🧙</span>
                 <a href="index.html" class="logo">Academic<span class="logo-accent">Wizard</span></a>
             </div>
             <button class="hamburger" aria-label="Menu">
@@ -35,18 +35,110 @@
                 <h1 class="dashboard-header">Admin Dashboard</h1>
                 
                 <!-- Stats Overview -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>Total Users</h3>
-                        <p id="total-users" class="stat-value">-</p>
+                <div class="admin-stats-overview">
+                    <div class="stats-grid-enhanced">
+                        <div class="stat-card-enhanced">
+                            <div class="stat-icon users-icon">👥</div>
+                            <div class="stat-content">
+                                <h3>Total Users</h3>
+                                <p id="total-users" class="stat-value-enhanced">-</p>
+                                <p class="stat-detail" id="users-breakdown">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="stat-card-enhanced">
+                            <div class="stat-icon bookings-icon">📚</div>
+                            <div class="stat-content">
+                                <h3>Total Bookings</h3>
+                                <p id="total-bookings" class="stat-value-enhanced">-</p>
+                                <p class="stat-detail" id="bookings-breakdown">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="stat-card-enhanced">
+                            <div class="stat-icon tutors-icon">🎓</div>
+                            <div class="stat-content">
+                                <h3>Active Tutors</h3>
+                                <p id="total-tutors" class="stat-value-enhanced">-</p>
+                                <p class="stat-detail" id="tutors-breakdown">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="stat-card-enhanced">
+                            <div class="stat-icon resources-icon">📖</div>
+                            <div class="stat-content">
+                                <h3>Resources</h3>
+                                <p id="total-resources" class="stat-value-enhanced">-</p>
+                                <p class="stat-detail" id="resources-breakdown">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="stat-card-enhanced">
+                            <div class="stat-icon revenue-icon">💰</div>
+                            <div class="stat-content">
+                                <h3>Total Revenue</h3>
+                                <p id="total-revenue" class="stat-value-enhanced">-</p>
+                                <p class="stat-detail" id="revenue-breakdown">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="stat-card-enhanced">
+                            <div class="stat-icon students-icon">🎯</div>
+                            <div class="stat-content">
+                                <h3>Active Students</h3>
+                                <p id="active-students" class="stat-value-enhanced">-</p>
+                                <p class="stat-detail" id="students-breakdown">Loading...</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <h3>Total Bookings</h3>
-                        <p id="total-bookings" class="stat-value">-</p>
+
+                    <!-- Recent Activity and Trends -->
+                    <div class="activity-trends">
+                        <div class="activity-card">
+                            <h3>Recent Activity</h3>
+                            <ul id="recent-activity-list" class="activity-list">
+                                <li class="activity-item loading">Loading recent activity...</li>
+                            </ul>
+                        </div>
+                        <div class="trends-card">
+                            <h3>This Week Overview</h3>
+                            <div class="trends-list" id="trends-summary">
+                                <div class="trend-item">
+                                    <span class="trend-label">New Users:</span>
+                                    <span class="trend-value" id="users-this-week">-</span>
+                                </div>
+                                <div class="trend-item">
+                                    <span class="trend-label">New Bookings:</span>
+                                    <span class="trend-value" id="bookings-this-week">-</span>
+                                </div>
+                                <div class="trend-item">
+                                    <span class="trend-label">Completed Sessions:</span>
+                                    <span class="trend-value" id="completed-this-week">-</span>
+                                </div>
+                                <div class="trend-item">
+                                    <span class="trend-label">Pending Bookings:</span>
+                                    <span class="trend-value" id="pending-bookings">-</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <h3>Tutors</h3>
-                        <p id="total-tutors" class="stat-value">-</p>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-section">
+                    <h2>Quick Actions</h2>
+                    <div class="quick-actions-grid">
+                        <button class="action-btn" onclick="document.getElementById('createTutorForm').scrollIntoView({behavior: 'smooth'})">
+                            <span class="action-icon">➕</span>
+                            <span>Create Tutor</span>
+                        </button>
+                        <button class="action-btn" onclick="document.getElementById('resources-section').scrollIntoView({behavior: 'smooth'})">
+                            <span class="action-icon">📄</span>
+                            <span>Add Resource</span>
+                        </button>
+                        <button class="action-btn" onclick="document.getElementById('bookings-section').scrollIntoView({behavior: 'smooth'})">
+                            <span class="action-icon">📅</span>
+                            <span>View Bookings</span>
+                        </button>
+                        <button class="action-btn" onclick="document.getElementById('tutors-search').focus(); document.getElementById('tutors-search').scrollIntoView({behavior: 'smooth'})">
+                            <span class="action-icon">👤</span>
+                            <span>Manage Tutors</span>
+                        </button>
                     </div>
                 </div>
 
@@ -101,8 +193,21 @@
                     <div id="tutors-pagination" class="pagination pagination-wrapper"></div>
                 </div>
 
-                <!-- Manage Resources -->
+                <!-- Manage Students -->
                 <div class="admin-section with-divider">
+                    <div class="section-divider"></div>
+                    <h2>Manage Students</h2>
+                    <div class="search-bar">
+                        <input type="text" id="students-search" placeholder="🔍 Search students by name, email, or phone...">
+                    </div>
+                    <div id="students-list" class="list-container">
+                        <p style="color: var(--text-muted);">Loading...</p>
+                    </div>
+                    <div id="students-pagination" class="pagination pagination-wrapper"></div>
+                </div>
+
+                <!-- Manage Resources -->
+                <div class="admin-section with-divider" id="resources-section">
                     <div class="section-divider"></div>
                     <h2 class="centered">Manage Resources</h2>
                     <div id="resource-messages"></div>
@@ -150,7 +255,7 @@
                 </div>
 
                 <!-- Manage Bookings -->
-                <div class="admin-section with-divider">
+                <div class="admin-section with-divider" id="bookings-section">
                     <div class="section-divider"></div>
                     <h2>Manage Bookings</h2>
                     <div class="search-bar">
