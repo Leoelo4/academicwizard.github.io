@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     const transporter = nodemailer.createTransporter({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER || 'leo.mills7777@gmail.com',
+        user: process.env.EMAIL_USER || 'Academicwizard@gmail.com',
         pass: process.env.EMAIL_PASSWORD
       }
     });
@@ -28,9 +28,9 @@ router.post('/', async (req, res) => {
     const adminMailOptions = {
       from: {
         name: 'Academic Wizard Contact Form',
-        address: process.env.EMAIL_USER || 'leo.mills7777@gmail.com'
+        address: process.env.EMAIL_USER || 'Academicwizard@gmail.com'
       },
-      to: process.env.EMAIL_USER || 'leo.mills7777@gmail.com',
+      to: process.env.EMAIL_USER || 'Academicwizard@gmail.com',
       subject: `Contact Form: ${subject || 'New Message'}`,
       html: `
         <!DOCTYPE html>

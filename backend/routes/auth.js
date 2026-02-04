@@ -35,7 +35,7 @@ router.post('/register', async (req, res) => {
       role: role || 'student'
     };
 
-    // Add tutor-specific fields if role is tutor
+    // Add tutor specific fields if role is tutor
     if (role === 'tutor') {
       if (subjects) userData.subjects = subjects;
       if (hourlyRate) userData.hourlyRate = hourlyRate;
@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // Check if role matches (case-insensitive)
+    // Check if role matches (case insensitive)
     if (role && user.role.toLowerCase() !== role.toLowerCase()) {
       return res.status(403).json({
         success: false,

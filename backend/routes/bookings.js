@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // Calculate amount based on tutor's hourly rate
+    // Calculate amount based on tutors hourly rate
     const hourlyRate = tutorUser.hourlyRate || 35;
     const amount = (hourlyRate / 60) * duration;
 
@@ -80,12 +80,12 @@ router.post('/', async (req, res) => {
       }
     } else {
       // Fallback to system user for guest bookings
-      studentUser = await User.findOne({ email: 'system@academicwizard.com' });
+      studentUser = await User.findOne({ email: 'Academicwizard@gmail.com' });
       if (!studentUser) {
         studentUser = await User.create({
           name: 'System',
-          email: 'system@academicwizard.com',
-          password: 'systemuser123',
+          email: 'Academicwizard@gmail.com',
+          password: 'password123',
           role: 'admin'
         });
       }

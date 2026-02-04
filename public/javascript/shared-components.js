@@ -50,7 +50,7 @@ function createFooter() {
           </div>
           <div class="footer-section">
             <h4>Contact</h4>
-            <p>📧 hello@academicwizard.com</p>
+            <p>📧 Academicwizard@gmail.com</p>
             <p>📞 01271 018638</p>
           </div>
         </div>

@@ -25,7 +25,7 @@ router.post('/create-checkout-session', protect, async (req, res) => {
       });
     }
 
-    // For demo purposes - if Stripe is not configured, return a mock session
+    // For demo purposes if Stripe is not configured, return a mock session
     if (!stripe) {
       console.log('Stripe not configured - returning mock session');
       return res.json({

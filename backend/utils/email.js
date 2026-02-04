@@ -5,8 +5,8 @@ const createTransporter = () => {
   return nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_USER || 'leo.mills7777@gmail.com',
-      pass: process.env.EMAIL_PASSWORD // App-specific password from Gmail
+      user: process.env.EMAIL_USER || 'Academicwizard@gmail.com',
+      pass: process.env.EMAIL_PASSWORD // App specific password from Gmail
     }
   });
 };
@@ -28,7 +28,7 @@ const sendBookingConfirmation = async (booking) => {
   const mailOptions = {
     from: {
       name: 'Academic Wizard',
-      address: process.env.EMAIL_USER || 'leo.mills7777@gmail.com'
+      address: process.env.EMAIL_USER || 'Academicwizard@gmail.com'
     },
     to: booking.studentEmail,
     subject: `Booking Confirmation - ${booking.bookingReference}`,
@@ -189,7 +189,7 @@ const sendBookingConfirmation = async (booking) => {
           
           <div class="footer">
             <p><strong>Academic Wizard</strong></p>
-            <p>Email: info@academicwizard.com | Phone: 020 1234 5678</p>
+            <p>Email: Academicwizard@gmail.com | Phone: 020 1234 5678</p>
             <p style="font-size: 12px; margin-top: 15px;">
               Please save this email for your records. Your booking reference is required for any inquiries.
             </p>

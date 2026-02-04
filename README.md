@@ -1,29 +1,29 @@
 # Academic Wizard 🧙‍♂️
 
-Hey! This is Academic Wizard - a full-stack tutoring platform I built to connect students with tutors. It's got everything from booking sessions to managing resources, all with a clean, modern UI.
+This is Academic Wizard - a tutoring platform that connects students with tutors. Students can book sessions, browse resources, and track their learning progress. Tutors manage schedules and sessions through their dashboard. There's also an admin panel for overall management.
 
-## What's This All About?
+## What is This?
 
-Academic Wizard is basically a one-stop platform for tutoring. Students can browse resources, book sessions with tutors, and track their progress. Tutors can manage their schedules and sessions. And there's an admin panel to keep everything running smoothly.
+Academic Wizard is a platform for tutoring services. Students browse resources, book sessions with tutors, and track progress. Tutors manage their schedules and sessions. The admin panel controls users, bookings, and resources.
 
-I built this using vanilla JavaScript on the frontend (keeping it simple and fast) with a Node.js/Express backend and MongoDB for the database. No fancy frameworks - just clean, straightforward code.
+Built with vanilla JavaScript on the frontend with a Node.js/Express backend and MongoDB database. Simple, clean code without complex frameworks.
 
-## The Cool Stuff 🚀
+## Features
 
-- **Student Dashboard** - Students can see their upcoming sessions, track progress, and manage bookings
-- **Tutor Management** - Tutors get their own dashboard to handle sessions and availability
-- **Admin Panel** - Full control over users, bookings, and resources
-- **Free Resources** - Study materials for KS3, GCSE, and A-Level students
-- **Booking System** - Easy session booking with email confirmations
-- **Responsive Design** - Looks great on phones, tablets, and desktops
-- **Authentication** - Secure login with JWT tokens and password hashing
+- **Student Dashboard** - View upcoming sessions, track progress, manage bookings
+- **Tutor Management** - Dashboard for tutors to handle sessions and availability
+- **Admin Panel** - Control over users, bookings, and resources
+- **Free Resources** - Study materials for KS3, GCSE, and A-Level
+- **Booking System** - Session booking with email confirmations
+- **Responsive Design** - Works on phones, tablets, and desktops
+- **Authentication** - Login with JWT tokens and password hashing
 
 ## Tech Stack
 
 **Frontend:**
-- Pure HTML/CSS/JavaScript (no frameworks, keeping it lean)
-- Custom CSS with modern animations and responsive design
-- Modular JavaScript for clean code organization
+- HTML/CSS/JavaScript (no frameworks)
+- Custom CSS with animations and responsive design
+- Modular JavaScript
 
 **Backend:**
 - Node.js + Express for the API
@@ -36,14 +36,14 @@ I built this using vanilla JavaScript on the frontend (keeping it simple and fas
 
 ### Prerequisites
 
-You'll need:
+Requirements:
 - Node.js (v14 or higher)
 - MongoDB (local or MongoDB Atlas account)
-- A Gmail account for sending emails
+- Gmail account for sending emails
 
 ### Installation
 
-1. **Clone the repo**
+1. **Clone the repository**
    ```bash
    git clone https://github.com/yourusername/academic-wizard.git
    cd academic-wizard
@@ -55,35 +55,35 @@ You'll need:
    npm install
    ```
 
-3. **Set up your environment variables**
+3. **Set up environment variables**
    
-   In the `backend` folder, there's a `.env` file. You need to add your own credentials:
+   In the `backend` folder, update the `.env` file with your credentials:
 
    ```env
-   # Email Configuration - ADD YOUR OWN
-   EMAIL_USER=your-email@gmail.com
-   EMAIL_PASSWORD=your-gmail-app-password
+   # Email Configuration
+   EMAIL_USER=Academicwizard@gmail.com
+   EMAIL_PASSWORD=password123
    ```
 
-   **Important:** I've left the email password blank in the public repo for security reasons. You need to:
+   **Note:** These are placeholder values. For production:
    - Go to https://myaccount.google.com/apppasswords
    - Generate an app password for Gmail
    - Add it to the `.env` file
 
-   The MongoDB connection and JWT secret are already set up, but feel free to change them if you want to use your own database.
+   The MongoDB connection and JWT secret are configured but can be changed for your own database.
 
 4. **Start the backend server**
    ```bash
    npm start
    ```
-   The API will run on `http://localhost:5000`
+   API runs on `http://localhost:5000`
 
 5. **Start the frontend** (in a new terminal)
    ```bash
    cd public
    python -m http.server 3000
    ```
-   Or use any static file server you prefer. The site will be at `http://localhost:3000`
+   Or use any static file server. Site will be at `http://localhost:3000`
 
 ## Project Structure
 
@@ -138,39 +138,39 @@ Academic-Wizard/
 
 ### User Flow
 
-1. **Students** can sign up, browse free resources, and book tutoring sessions
-2. **Tutors** log in to see their schedule and manage sessions
-3. **Admins** can create tutors, manage users, and add/remove resources
+1. **Students** sign up, browse resources, and book tutoring sessions
+2. **Tutors** log in to view schedule and manage sessions
+3. **Admins** create tutors, manage users, and add/remove resources
 
 ### Authentication
 
-- Uses JWT tokens stored in localStorage
-- Passwords are hashed with bcrypt
+- JWT tokens stored in localStorage
+- Passwords hashed with bcrypt
 - Protected routes check for valid tokens
 
 ### Booking System
 
-- Students select a tutor, date, and time
+- Students select tutor, date, and time
 - System checks tutor availability
 - Sends confirmation email to student
-- Updates both student and tutor dashboards
+- Updates student and tutor dashboards
 
 ### Database
 
-All data is stored in MongoDB with three main collections:
+Data stored in MongoDB with three main collections:
 - **Users** - Student/tutor/admin accounts
 - **Bookings** - Tutoring session records
 - **Resources** - Study materials metadata
 
 ## Creating an Admin Account
 
-Run this from the backend folder:
+Run from the backend folder:
 
 ```bash
 node scripts/create-admin.js
 ```
 
-This creates an admin account with full access to the admin panel.
+Creates an admin account with full access to the admin panel.
 
 ## API Endpoints
 
@@ -197,57 +197,57 @@ This creates an admin account with full access to the admin panel.
 ## Security Notes
 
 **For Public GitHub:**
-- The `.env` file is included but with placeholder values for passwords
+- The `.env` file includes placeholder values for passwords
 - Never commit real email passwords or API keys
-- The MongoDB connection string uses a demo database
+- MongoDB connection string uses a demo database
 - Change JWT_SECRET in production
 
-**If you're deploying this:**
+**For Deployment:**
 1. Generate a strong JWT_SECRET
 2. Set up your own MongoDB database
-3. Use environment variables on your hosting platform
+3. Use environment variables on hosting platform
 4. Enable CORS properly for your domain
 
 ## Contact Info Update
 
-I've set the contact email to `Leo.mills7777@gmail.com` throughout the site. If you want to change it, update:
+Contact email is set to `Academicwizard@gmail.com` throughout the site. To change it, update:
 - `public/index.html` - Contact section and footer
 - `public/contact.html` - Contact info boxes and footer
 - `public/about.html` - Footer
 - `backend/.env` - EMAIL_USER variable
 
-Same goes for phone number and address - they're placeholder values right now.
+Phone number and address are placeholder values.
 
-## Known Quirks
+## Known Issues
 
-- Resources page dynamically loads content, so you need the backend running
+- Resources page dynamically loads content, requires backend running
 - Email notifications require Gmail app password setup
-- Booking times are hardcoded (9AM-8PM) - you can change this in `booking.js`
+- Booking times are hardcoded (9AM-8PM) - can be changed in `booking.js`
 
 ## Future Ideas
 
-Some things I might add later:
+Potential additions:
 - Payment integration (Stripe/PayPal)
 - Video call integration for online sessions
 - Calendar sync (Google Calendar)
 - Review/rating system for tutors
 - Automated reminder emails
 
-## Why No Fancy Framework?
+## Why Vanilla JavaScript?
 
-I went with vanilla JavaScript to keep things simple and performant. No build process, no dependencies on the frontend, just clean code that's easy to understand and modify. Plus it loads fast!
+Vanilla JavaScript keeps things simple and performant. No build process, no frontend dependencies, clean code that's easy to understand and modify. Fast loading times.
 
 ## License
 
-This is open source - feel free to use it for your own tutoring platform or as a learning resource. Just don't sell it as your own work!
+Open source - use it for your own tutoring platform or as a learning resource. Do not sell as your own work.
 
 ## Questions?
 
-If you're stuck or have questions, check the code comments or reach out. The code is pretty well organized and should be straightforward to follow.
+Check the code comments for guidance. The code is organized and documented.
 
 ---
 
-Built with ☕ and late nights by someone who probably should have used React but didn't 😄
+Built as part of university coursework
 
 4. **Open the frontend:**
 - Open `public/index.html` in your browser
@@ -255,8 +255,8 @@ Built with ☕ and late nights by someone who probably should have used React bu
 ## Default Login
 
 **Admin Account:**
-- Email: `admin@academicwizard.com`
-- Password: `leokade1`
+- Email: `Academicwizard@gmail.com`
+- Password: `password123`
 
 ## Technologies Used
 
